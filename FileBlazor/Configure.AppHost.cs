@@ -47,7 +47,7 @@ public class AppHost : AppHostBase, IHostingStartup
                 {
                     if (ctx.Dto is IAppFile { FileAccessType: { } } createFile)
                     {
-                        return $"/azure/{createFile.FileAccessType}/{ctx.FileName}";
+                        return ctx.GetLocationPath($"/azure/{createFile.FileAccessType}/{ctx.FileName}");
                     }
                     else
                         throw HttpError.BadRequest("Invalid file creation request.");
@@ -60,7 +60,7 @@ public class AppHost : AppHostBase, IHostingStartup
                 {
                     if (ctx.Dto is IAppFile { FileAccessType: { } } createFile)
                     {
-                        return $"/aws/{createFile.FileAccessType}/{ctx.FileName}";
+                        return ctx.GetLocationPath($"/aws/{createFile.FileAccessType}/{ctx.FileName}");
                     }
                     else
                         throw HttpError.BadRequest("Invalid file creation request.");
@@ -73,7 +73,7 @@ public class AppHost : AppHostBase, IHostingStartup
                 {
                     if (ctx.Dto is IAppFile { FileAccessType: { } } createFile)
                     {
-                        return $"/local/{createFile.FileAccessType}/{ctx.FileName}";
+                        return ctx.GetLocationPath($"/local/{createFile.FileAccessType}/{ctx.FileName}");
                     }
                     else
                         throw HttpError.BadRequest("Invalid file creation request.");
