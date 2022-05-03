@@ -58,7 +58,7 @@ public class AppHost : AppHostBase, IHostingStartup
                 {
                     if (ctx.Dto is IAppFile { FileAccessType: { } } createFile)
                     {
-                        return $"/local/{createFile.FileAccessType}/{ctx.FileName}";
+                        return $"/aws/{createFile.FileAccessType}/{ctx.FileName}";
                     }
                     else
                         throw HttpError.BadRequest("Invalid file creation request.");
@@ -70,7 +70,7 @@ public class AppHost : AppHostBase, IHostingStartup
                 {
                     if (ctx.Dto is IAppFile { FileAccessType: { } } createFile)
                     {
-                        return $"/aws/{createFile.FileAccessType}/{ctx.FileName}";
+                        return $"/local/{createFile.FileAccessType}/{ctx.FileName}";
                     }
                     else
                         throw HttpError.BadRequest("Invalid file creation request.");
