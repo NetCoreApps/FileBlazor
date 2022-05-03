@@ -58,6 +58,8 @@ namespace FileBlazor.ServiceModel.Types
     // Custom User Table with extended Metadata properties
     public class AppUser : IUserAuth
     {
+        [AutoIncrement]
+        public int Id { get; set; }
         public string? ProfileUrl { get; set; }
         public string? LastLoginIp { get; set; }
 
@@ -65,7 +67,6 @@ namespace FileBlazor.ServiceModel.Types
         public DateTime? ArchivedDate { get; set; }
 
         public DateTime? LastLoginDate { get; set; }
-        public int Id { get; set; }
         public string PrimaryEmail { get; set; }
         [IgnoreDataMember]
         public string Salt { get; set; }
