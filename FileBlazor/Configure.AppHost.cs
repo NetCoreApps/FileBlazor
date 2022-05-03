@@ -41,6 +41,7 @@ public class AppHost : AppHostBase, IHostingStartup
             "file-blazor-demo");
         Plugins.Add(new FilesUploadFeature(
             new UploadLocation("azure", azureBlobVfs,
+                allowExtensions: FileExt.WebImages,
                 readAccessRole: RoleNames.AllowAnon,
                 resolvePath: ctx =>
                 {
@@ -53,6 +54,7 @@ public class AppHost : AppHostBase, IHostingStartup
                     
                 }),
             new UploadLocation("s3", s3DataVfs,
+                allowExtensions: FileExt.WebImages,
                 readAccessRole: RoleNames.AllowAnon,
                 resolvePath: ctx =>
                 {
@@ -65,6 +67,7 @@ public class AppHost : AppHostBase, IHostingStartup
                     
                 }),
             new UploadLocation("fs", appDataVfs,
+                allowExtensions: FileExt.WebImages,
                 readAccessRole: RoleNames.AllowAnon,
                 resolvePath: ctx =>
                 {

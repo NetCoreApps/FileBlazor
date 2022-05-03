@@ -10,37 +10,39 @@ using System.Runtime.Serialization;
 
 namespace FileBlazor.ServiceModel.Types
 {
-
     public class AppUserFsFile
     {
-        [AutoIncrement]
+        [AutoIncrement] 
         public int Id { get; set; }
-        
+
         public FileAccessType? FileAccessType { get; set; }
+        [Format(FormatMethods.IconRounded)]
         public string? FilePath { get; set; }
         public int AppUserId { get; set; }
     }
-    
+
     public class AppUserS3File
     {
-        [AutoIncrement]
+        [AutoIncrement] 
         public int Id { get; set; }
-        
+
         public FileAccessType? FileAccessType { get; set; }
+        [Format(FormatMethods.IconRounded)]
         public string? FilePath { get; set; }
         public int AppUserId { get; set; }
     }
 
     public class AppUserAzureFile
     {
-        [AutoIncrement]
+        [AutoIncrement] 
         public int Id { get; set; }
-        
+
         public FileAccessType? FileAccessType { get; set; }
+        [Format(FormatMethods.IconRounded)]
         public string? FilePath { get; set; }
         public int AppUserId { get; set; }
     }
-    
+
     public enum FileAccessType
     {
         Private,
@@ -58,37 +60,36 @@ namespace FileBlazor.ServiceModel.Types
     // Custom User Table with extended Metadata properties
     public class AppUser : IUserAuth
     {
-        [AutoIncrement]
+        [AutoIncrement] 
         public int Id { get; set; }
-        public string? ProfileUrl { get; set; }
-        public string? LastLoginIp { get; set; }
+        public string DisplayName { get; set; }
 
+        [Index]
+        [Format(FormatMethods.LinkEmail)]
+        public string Email { get; set; }
+
+        // Custom Properties
+        // [Format(FormatMethods.IconRounded)]
+        // [Input(Type = "file"), UploadTo("users")]
+        public string ProfileUrl { get; set; }
+
+        public string Title { get; set; }
+        public string JobArea { get; set; }
+        public string Location { get; set; }
+        public int Salary { get; set; }
+        public string About { get; set; }
         public bool IsArchived { get; set; }
         public DateTime? ArchivedDate { get; set; }
-
         public DateTime? LastLoginDate { get; set; }
-        public string PrimaryEmail { get; set; }
-        [IgnoreDataMember]
-        public string Salt { get; set; }
-        [IgnoreDataMember]
-        public string PasswordHash { get; set; }
-        [IgnoreDataMember]
-        public string DigestHa1Hash { get; set; }
-        public List<string> Roles { get; set; }
-        public List<string> Permissions { get; set; }
-        public int? RefId { get; set; }
-        public string RefIdStr { get; set; }
-        public int InvalidLoginAttempts { get; set; }
-        public DateTime? LastLoginAttempt { get; set; }
-        public DateTime? LockedDate { get; set; }
-        public DateTime CreatedDate { get; set; }
-        public DateTime ModifiedDate { get; set; }
+        public string LastLoginIp { get; set; }
+
+        // UserAuth Properties
         public string UserName { get; set; }
-        public string DisplayName { get; set; }
+        public string PrimaryEmail { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public string Company { get; set; }
-        public string Email { get; set; }
+        public string Country { get; set; }
         public string PhoneNumber { get; set; }
         public DateTime? BirthDate { get; set; }
         public string BirthDateRaw { get; set; }
@@ -96,7 +97,6 @@ namespace FileBlazor.ServiceModel.Types
         public string Address2 { get; set; }
         public string City { get; set; }
         public string State { get; set; }
-        public string Country { get; set; }
         public string Culture { get; set; }
         public string FullName { get; set; }
         public string Gender { get; set; }
@@ -105,6 +105,25 @@ namespace FileBlazor.ServiceModel.Types
         public string Nickname { get; set; }
         public string PostalCode { get; set; }
         public string TimeZone { get; set; }
+        [IgnoreDataMember] 
+        public string Salt { get; set; }
+        [IgnoreDataMember] 
+        public string PasswordHash { get; set; }
+        [IgnoreDataMember] 
+        public string DigestHa1Hash { get; set; }
+        public List<string> Roles { get; set; } = new();
+        public List<string> Permissions { get; set; } = new();
+        public DateTime CreatedDate { get; set; }
+        public DateTime ModifiedDate { get; set; }
+        public int InvalidLoginAttempts { get; set; }
+        public DateTime? LastLoginAttempt { get; set; }
+        public DateTime? LockedDate { get; set; }
+        [IgnoreDataMember] 
+        public string RecoveryToken { get; set; }
+
+        //Custom Reference Data
+        public int? RefId { get; set; }
+        public string RefIdStr { get; set; }
         public Dictionary<string, string> Meta { get; set; }
     }
 }
