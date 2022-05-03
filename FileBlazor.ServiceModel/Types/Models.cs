@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using ServiceStack;
+using System.Runtime.Serialization;
 
 namespace FileBlazor.ServiceModel.Types
 {
@@ -66,8 +67,11 @@ namespace FileBlazor.ServiceModel.Types
         public DateTime? LastLoginDate { get; set; }
         public int Id { get; set; }
         public string PrimaryEmail { get; set; }
+        [IgnoreDataMember]
         public string Salt { get; set; }
+        [IgnoreDataMember]
         public string PasswordHash { get; set; }
+        [IgnoreDataMember]
         public string DigestHa1Hash { get; set; }
         public List<string> Roles { get; set; }
         public List<string> Permissions { get; set; }

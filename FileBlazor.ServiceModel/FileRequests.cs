@@ -3,6 +3,11 @@ using ServiceStack;
 
 namespace FileBlazor.ServiceModel;
 
+public class QueryAppUser : QueryDb<AppUser>
+{
+
+}
+
 public class QueryAppUserFile : QueryDb<AppUserFsFile>
 {
     
