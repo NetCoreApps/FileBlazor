@@ -10,6 +10,7 @@
 .history/
 *.db
 .vs/
+App_Data/
 
 # User-specific files
 *.rsuser
