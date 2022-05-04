@@ -33,7 +33,6 @@ public class AppHost : AppHostBase, IHostingStartup
                 "https://" + Environment.GetEnvironmentVariable("DEPLOY_CDN")
             }, allowCredentials: true));
 
-        var appFs = new FileSystemVirtualFiles(ContentRootDirectory.RealPath.CombineWith("App_Data").AssertDir());
         var awsAccessKeyId = Environment.GetEnvironmentVariable("AWS_ACCESS_KEY_ID") ??
                              Environment.GetEnvironmentVariable("LOCAL_AWS_ACCESS_KEY_ID");
         var awsSecretAccessKey = Environment.GetEnvironmentVariable("AWS_SECRET_ACCESS_KEY") ??
@@ -41,6 +40,7 @@ public class AppHost : AppHostBase, IHostingStartup
         var azureBlobConnString = Environment.GetEnvironmentVariable("AZURE_BLOB_CONNECTION_STRING") ??
                                   Environment.GetEnvironmentVariable("LOCAL_AZURE_BLOB_CONNECTION_STRING");
 
+        var appFs = new FileSystemVirtualFiles(ContentRootDirectory.RealPath.CombineWith("App_Data").AssertDir());
         var s3Client = new AmazonS3Client(awsAccessKeyId, awsSecretAccessKey, RegionEndpoint.USEast1);
         var s3DataVfs = new S3VirtualFiles(s3Client, "file-blazor-demo");
         var azureBlobVfs = new AzureBlobVirtualFiles(azureBlobConnString, "file-blazor-demo");
