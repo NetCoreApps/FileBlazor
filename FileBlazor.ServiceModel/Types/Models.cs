@@ -10,7 +10,7 @@ using System.Runtime.Serialization;
 
 namespace FileBlazor.ServiceModel.Types
 {
-    public class AppUserFsFile
+    public class AppUserFsFile : IAppFile
     {
         [AutoIncrement] 
         public int Id { get; set; }
@@ -21,7 +21,7 @@ namespace FileBlazor.ServiceModel.Types
         public int AppUserId { get; set; }
     }
 
-    public class AppUserS3File
+    public class AppUserS3File : IAppFile
     {
         [AutoIncrement] 
         public int Id { get; set; }
@@ -32,7 +32,7 @@ namespace FileBlazor.ServiceModel.Types
         public int AppUserId { get; set; }
     }
 
-    public class AppUserAzureFile
+    public class AppUserAzureFile : IAppFile
     {
         [AutoIncrement] 
         public int Id { get; set; }

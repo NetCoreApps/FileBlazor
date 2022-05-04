@@ -1,0 +1,48 @@
+﻿@page "/aws/{AccessType}"
+@using FileBlazor.ServiceModel.Types
+@inject ServiceStackStateProvider AuthStateProvider;
+@inject NavigationManager NavigationManager;
+@inherits AppComponentBase
+<h3>Aws View - @FileAccessType.ToString()</h3>
+<div>
+    @if(FileAccessType == ServiceModel.Types.FileAccessType.Gallery && AppFiles != null)
+    {
+        <GalleryItems AppFiles="AppFiles"></GalleryItems>
+    }
+</div>
+
+@code {
+    [Parameter]
+    public string? AccessType { get; set; }
+
+    private FileAccessType? FileAccessType;
+
+    private List<IAppFile> AppFiles { get; set; }
+    ResponseStatus? errorStatus;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await refreshFiles();
+        await base.OnInitializedAsync();
+    }
+
+    async Task refreshFiles()
+    {
+        var api = await ApiAsync(new QueryAppUserS3File());
+        if (api.Succeeded)
+            AppFiles = api.Response!.Results.Select(x => (IAppFile)x).ToList();
+        else
+            errorStatus = api.Error;
+    }
+
+    protected override async Task OnParametersSetAsync()
+    {
+        if(AccessType == null)
+            NavigationManager.NavigateTo("/aws");
+        else
+        {
+            FileAccessType = AccessType.ToEnum<FileAccessType>();
+        }
+        await base.OnParametersSetAsync();
+    }
+}

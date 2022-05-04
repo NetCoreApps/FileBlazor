@@ -1,0 +1,23 @@
+﻿@page "/filesystem/{AccessType}"
+@using FileBlazor.ServiceModel.Types
+@inject ServiceStackStateProvider AuthStateProvider;
+@inject NavigationManager NavigationManager;
+<h3>File System View - @FileAccessType.ToString()</h3>
+
+@code {
+    [Parameter]
+    public string? AccessType { get; set; }
+
+    private FileAccessType? FileAccessType;
+
+    protected override async Task OnParametersSetAsync()
+    {
+        if(AccessType == null)
+            NavigationManager.NavigateTo("/filesystem");
+        else
+        {
+            FileAccessType = AccessType.ToEnum<FileAccessType>();
+        }
+        await base.OnParametersSetAsync();
+    }
+}

@@ -18,6 +18,17 @@
     <ItemGroup>
       <ProjectReference Include="..\FileBlazor.ServiceModel\FileBlazor.ServiceModel.csproj" />
     </ItemGroup>
+    <ItemGroup>
+      <_ContentIncludedByDefault Remove="Pages\Aws\AwsGallery.razor" />
+      <_ContentIncludedByDefault Remove="Pages\Aws\AwsPrivate.razor" />
+      <_ContentIncludedByDefault Remove="Pages\Aws\AwsPublic.razor" />
+      <_ContentIncludedByDefault Remove="Pages\Azure\AzureGallery.razor" />
+      <_ContentIncludedByDefault Remove="Pages\Azure\AzurePrivate.razor" />
+      <_ContentIncludedByDefault Remove="Pages\Azure\AzurePublic.razor" />
+      <_ContentIncludedByDefault Remove="Pages\Filesystem\FileSysGallery.razor" />
+      <_ContentIncludedByDefault Remove="Pages\Filesystem\FileSysPrivate.razor" />
+      <_ContentIncludedByDefault Remove="Pages\Filesystem\FileSysPublic.razor" />
+    </ItemGroup>
 </Project>
 
 

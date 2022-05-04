@@ -1,0 +1,23 @@
+﻿@page "/azure/{AccessType}"
+@using FileBlazor.ServiceModel.Types
+@inject ServiceStackStateProvider AuthStateProvider;
+@inject NavigationManager NavigationManager;
+<h3>Azure View - @FileAccessType.ToString()</h3>
+
+@code {
+    [Parameter]
+    public string? AccessType { get; set; }
+
+    private FileAccessType? FileAccessType;
+    
+    protected override async Task OnParametersSetAsync()
+    {
+        if(AccessType == null)
+            NavigationManager.NavigateTo("/azure");
+        else
+        {
+            FileAccessType = AccessType.ToEnum<FileAccessType>();
+        }
+        await base.OnParametersSetAsync();
+    }
+}

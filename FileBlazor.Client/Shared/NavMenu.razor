@@ -1,74 +1,199 @@
 @inject ServiceStackStateProvider AuthStateProvider;
 @inject NavigationManager NavigationManager;
 
-<nav class="flex-1 px-2 bg-white" aria-label="Sidebar">
-    <div>
-        <!-- Current: "bg-gray-100 text-gray-900", Default: "bg-white text-gray-600 hover:bg-gray-50 hover:text-gray-900" -->
-        <a href="#" class="bg-gray-100 text-gray-900 group w-full flex items-center pl-2 py-2 text-sm font-medium rounded-md">
-            <!--
-            Heroicon name: outline/home
+<!-- Off-canvas menu for mobile, show/hide based on off-canvas menu state. -->
+<div class="fixed inset-0 z-40 flex md:hidden" role="dialog" aria-modal="true">
+    <!--
+    Off-canvas menu overlay, show/hide based on off-canvas menu state.
 
-            Current: "text-gray-500", Default: "text-gray-400 group-hover:text-gray-500"
-            -->
-            <svg class="text-gray-500 mr-3 flex-shrink-0 h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/>
-            </svg>
-            Dashboard
-        </a>
-    </div>
+    Entering: "transition-opacity ease-linear duration-300"
+    From: "opacity-0"
+    To: "opacity-100"
+    Leaving: "transition-opacity ease-linear duration-300"
+    From: "opacity-100"
+    To: "opacity-0"
+    -->
+    <div class="fixed inset-0 bg-gray-600 bg-opacity-75" aria-hidden="true"></div>
 
-    <div>
-        <!-- Current: "bg-gray-100 text-gray-900", Default: "bg-white text-gray-600 hover:bg-gray-50 hover:text-gray-900" -->
-        <button type="button" class="bg-white text-gray-600 hover:bg-gray-50 hover:text-gray-900 group w-full flex items-center pl-2 pr-1 py-2 text-left text-sm font-medium rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500" aria-controls="sub-menu-1" aria-expanded="false">
-            <!-- Heroicon name: outline/users -->
+    <!--
+    Off-canvas menu, show/hide based on off-canvas menu state.
+
+    Entering: "transition ease-in-out duration-300 transform"
+    From: "-translate-x-full"
+    To: "translate-x-0"
+    Leaving: "transition ease-in-out duration-300 transform"
+    From: "translate-x-0"
+    To: "-translate-x-full"
+    -->
+    <div class="relative max-w-xs w-full bg-white pt-5 pb-4 flex-1 flex flex-col">
+        <!--
+        Close button, show/hide based on off-canvas menu state.
+
+        Entering: "ease-in-out duration-300"
+        From: "opacity-0"
+        To: "opacity-100"
+        Leaving: "ease-in-out duration-300"
+        From: "opacity-100"
+        To: "opacity-0"
+        -->
+        <div class="absolute top-0 right-0 -mr-12 pt-2">
+            <button type="button" class="ml-1 flex items-center justify-center h-10 w-10 rounded-full focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white">
+                <span class="sr-only">Close sidebar</span>
+                <!-- Heroicon name: outline/x -->
+                <svg class="h-6 w-6 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                </svg>
+            </button>
+        </div>
+
+        <div class="flex-shrink-0 px-4 flex items-center">
+            <img class="h-8 w-auto" src="https://tailwindui.com/img/logos/workflow-logo-indigo-600-mark-gray-800-text.svg" alt="Workflow">
+        </div>
+        <div class="mt-5 flex-1 h-0 overflow-y-auto">
+            <nav class="px-2 space-y-1">
+                <!-- Current: "bg-gray-100 text-gray-900", Default: "text-gray-600 hover:bg-gray-50 hover:text-gray-900" -->
+                <NavLink href="/" ActiveClass="bg-gray-100 text-gray-900" Match="NavLinkMatch.All" class="text-gray-600 hover:bg-gray-50 hover:text-gray-900 group rounded-md py-2 px-2 flex items-center text-base font-medium">
+                    <!--
+                    Heroicon name: outline/home
+
+                    Current: "text-gray-500", Default: "text-gray-400 group-hover:text-gray-500"
+                    -->
+                    <svg class="text-gray-500 mr-4 flex-shrink-0 h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/>
+                    </svg>
+                    Dashboard
+                </NavLink>
+
+                <NavLink href="/aws" ActiveClass="bg-gray-100 text-gray-900" Match="NavLinkMatch.All" class="text-gray-600 hover:bg-gray-50 hover:text-gray-900 group rounded-md py-2 px-2 flex items-center text-base font-medium">
+                    <!-- Heroicon name: outline/users -->
+                    <img alt="AWS Logo" src="/img/aws-s3.svg" class="mr-3 flex-shrink-0 h-10 w-24 text-gray-400 group-hover:text-gray-500" />
+                        <div class="w-full">
+                            <NavLink href="/aws/public" ActiveClass="bg-gray-100 text-gray-900" class="group w-full flex items-center pl-11 pr-2 py-2 text-sm font-medium text-gray-600 rounded-md hover:text-gray-900 hover:bg-gray-50"> Public </NavLink>
+                
+                            <NavLink href="/aws/private" ActiveClass="bg-gray-100 text-gray-900" class="group w-full flex items-center pl-11 pr-2 py-2 text-sm font-medium text-gray-600 rounded-md hover:text-gray-900 hover:bg-gray-50"> Private </NavLink>
+                
+                            <NavLink href="/aws/gallery" ActiveClass="bg-gray-100 text-gray-900" class="group w-full flex items-center pl-11 pr-2 py-2 text-sm font-medium text-gray-600 rounded-md hover:text-gray-900 hover:bg-gray-50"> Gallery </NavLink>
+                
+                        </div>
+                </NavLink>
+
+                <NavLink href="/azure" ActiveClass="bg-gray-100 text-gray-900" Match="NavLinkMatch.All" class="text-gray-600 hover:bg-gray-50 hover:text-gray-900 group rounded-md py-2 px-2 flex items-center text-base font-medium">
+                    <!-- Heroicon name: outline/folder -->
+                    <img src="/img/azure.svg" class="mr-3 flex-shrink-0 h-10 w-24 text-gray-400 group-hover:text-gray-500" />
+                    <span> </span>
+                    <div class="w-full">
+                        <NavLink href="/azure/public" ActiveClass="bg-gray-100 text-gray-900" class="group w-full flex items-center pl-11 pr-2 py-2 text-sm font-medium text-gray-600 rounded-md hover:text-gray-900 hover:bg-gray-50"> Public </NavLink>
             
-            <img src="/img/aws-s3.svg" class="mr-3 flex-shrink-0 h-10 w-24 text-gray-400 group-hover:text-gray-500" />
-            <span class="flex-1">  </span>
-        </button>
-        <!-- Expandable link section, show/hide based on state. -->
-        <div id="sub-menu-1">
-            <a href="#" class="group w-full flex items-center pl-11 pr-2 py-2 text-sm font-medium text-gray-600 rounded-md hover:text-gray-900 hover:bg-gray-50"> Public </a>
+                        <NavLink href="/azure/private" ActiveClass="bg-gray-100 text-gray-900" class="group w-full flex items-center pl-11 pr-2 py-2 text-sm font-medium text-gray-600 rounded-md hover:text-gray-900 hover:bg-gray-50"> Private </NavLink>
+            
+                        <NavLink href="/azure/gallery" ActiveClass="bg-gray-100 text-gray-900" class="group w-full flex items-center pl-11 pr-2 py-2 text-sm font-medium text-gray-600 rounded-md hover:text-gray-900 hover:bg-gray-50"> Gallery </NavLink>
+                    </div>
+                </NavLink>
 
-            <a href="#" class="group w-full flex items-center pl-11 pr-2 py-2 text-sm font-medium text-gray-600 rounded-md hover:text-gray-900 hover:bg-gray-50"> Private </a>
-
-            <a href="#" class="group w-full flex items-center pl-11 pr-2 py-2 text-sm font-medium text-gray-600 rounded-md hover:text-gray-900 hover:bg-gray-50"> Gallery </a>
-
+                <NavLink href="/filesystem" ActiveClass="bg-gray-100 text-gray-900" Match="NavLinkMatch.All" class="text-gray-600 hover:bg-gray-50 hover:text-gray-900 group rounded-md py-2 px-2 flex items-center text-base font-medium">
+                    <!-- Heroicon name: outline/calendar -->
+                    <div class="mr-3 flex-shrink-0 h-10 w-24 text-gray-400 group-hover:text-gray-500">
+                        <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img" width="2em" height="2em" preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24"><path fill="currentColor" d="M21 8h-2.59l-1-1H15a2.006 2.006 0 0 0-2 2v4a2.006 2.006 0 0 0 2 2h6a2.006 2.006 0 0 0 2-2v-3a2.006 2.006 0 0 0-2-2Zm0 5h-6V9h2l1 1h3Zm0 4h-2.59l-1-1H15a2.006 2.006 0 0 0-2 2v4a2.006 2.006 0 0 0 2 2h6a2.006 2.006 0 0 0 2-2v-3a2.006 2.006 0 0 0-2-2Zm0 5h-6v-4h2l1 1h3ZM8 19v-7h5v-2H8V8H6v13h7v-2H8zm2-18H7.41l-1-1H4a2.006 2.006 0 0 0-2 2v4a2.006 2.006 0 0 0 2 2h6a2.006 2.006 0 0 0 2-2V3a2.006 2.006 0 0 0-2-2Zm0 5H4V2h2l1 1h3Z"/></svg>
+                        <span class="flex-1 px-2 text-md">   FileSystem </span>
+                    </div>
+                    <div class="w-full">
+                        <NavLink href="/filesystem/public" ActiveClass="bg-gray-100 text-gray-900" class="group w-full flex items-center pl-11 pr-2 py-2 text-sm font-medium text-gray-600 rounded-md hover:text-gray-900 hover:bg-gray-50"> Public </NavLink>
+            
+                        <NavLink href="/filesystem/private" ActiveClass="bg-gray-100 text-gray-900" class="group w-full flex items-center pl-11 pr-2 py-2 text-sm font-medium text-gray-600 rounded-md hover:text-gray-900 hover:bg-gray-50"> Private </NavLink>
+            
+                        <NavLink href="/filesystem/gallery" ActiveClass="bg-gray-100 text-gray-900" class="group w-full flex items-center pl-11 pr-2 py-2 text-sm font-medium text-gray-600 rounded-md hover:text-gray-900 hover:bg-gray-50"> Gallery </NavLink>
+            
+                    </div>
+                </NavLink>
+            </nav>
         </div>
     </div>
 
-    <div>
-        <!-- Current: "bg-gray-100 text-gray-900", Default: "bg-white text-gray-600 hover:bg-gray-50 hover:text-gray-900" -->
-        <button type="button" class="bg-white text-gray-600 hover:bg-gray-50 hover:text-gray-900 group w-full flex items-center pl-2 pr-1 py-2 text-left text-sm font-medium rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500" aria-controls="sub-menu-2" aria-expanded="false">
-            <!-- Heroicon name: outline/folder -->
-            <img src="/img/azure.svg" class="mr-3 flex-shrink-0 h-10 w-24 text-gray-400 group-hover:text-gray-500" />
-            <span class="flex-1"> </span>
-        </button>
-        <!-- Expandable link section, show/hide based on state. -->
-        <div id="sub-menu-2">
-            <a href="#" class="group w-full flex items-center pl-11 pr-2 py-2 text-sm font-medium text-gray-600 rounded-md hover:text-gray-900 hover:bg-gray-50"> Public </a>
+    <div class="flex-shrink-0 w-14">
+        <!-- Dummy element to force sidebar to shrink to fit close icon -->
+    </div>
+</div>
 
-            <a href="#" class="group w-full flex items-center pl-11 pr-2 py-2 text-sm font-medium text-gray-600 rounded-md hover:text-gray-900 hover:bg-gray-50"> Private </a>
 
-            <a href="#" class="group w-full flex items-center pl-11 pr-2 py-2 text-sm font-medium text-gray-600 rounded-md hover:text-gray-900 hover:bg-gray-50"> Gallery </a>
+<div class="hidden md:flex md:w-64 md:flex-col md:fixed md:inset-y-0">
+    <!-- Sidebar component, swap this element with another sidebar if you like -->
+    <div class="border-r border-gray-200 pt-5 flex flex-col flex-grow bg-white overflow-y-auto">
+        <div class="flex items-center flex-shrink-0 px-4">
+            <img class="h-8 w-auto" src="https://tailwindui.com/img/logos/workflow-logo-indigo-600-mark-gray-800-text.svg" alt="Workflow">
+        </div>
+        <div class="mt-5 flex-grow flex flex-col">
+            <nav class="flex-1 px-2 bg-white" aria-label="Sidebar">
+                <div>
+                    <!-- Current: "bg-gray-100 text-gray-900", Default: "bg-white text-gray-600 hover:bg-gray-50 hover:text-gray-900" -->
+                    <NavLink href="/" ActiveClass="bg-gray-100 text-gray-900" Match="NavLinkMatch.All" class="bg-white text-gray-600 hover:bg-gray-50 hover:text-gray-900 group w-full flex items-center pl-2 py-2 text-sm font-medium rounded-md">
+                        <!--
+                        Heroicon name: outline/home
+            
+                        Current: "text-gray-500", Default: "text-gray-400 group-hover:text-gray-500"
+                        -->
+                        <svg class="text-gray-500 mr-3 flex-shrink-0 h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/>
+                        </svg>
+                        Dashboard
+                    </NavLink>
+                </div>
+            
+                <div>
+                    <!-- Current: "bg-gray-100 text-gray-900", Default: "bg-white text-gray-600 hover:bg-gray-50 hover:text-gray-900" -->
+                    <NavLink href="/aws" ActiveClass="bg-gray-100 text-gray-900" Match="NavLinkMatch.All" class="bg-white text-gray-600 hover:bg-gray-50 hover:text-gray-900 group w-full flex items-center pl-2 pr-1 py-2 text-left text-sm font-medium rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500" aria-controls="sub-menu-1" aria-expanded="false">
+                        <!-- Heroicon name: outline/users -->
+                        
+                        <img alt="AWS Logo" src="/img/aws-s3.svg" class="mr-3 flex-shrink-0 h-10 w-24 text-gray-400 group-hover:text-gray-500" />
+                        <span class="flex-1">  </span>
+                    </NavLink>
+                    <!-- Expandable link section, show/hide based on state. -->
+                    <div id="sub-menu-1">
+                        <NavLink href="/aws/public" ActiveClass="bg-gray-100 text-gray-900" class="group w-full flex items-center pl-11 pr-2 py-2 text-sm font-medium text-gray-600 rounded-md hover:text-gray-900 hover:bg-gray-50"> Public </NavLink>
+            
+                        <NavLink href="/aws/private" ActiveClass="bg-gray-100 text-gray-900" class="group w-full flex items-center pl-11 pr-2 py-2 text-sm font-medium text-gray-600 rounded-md hover:text-gray-900 hover:bg-gray-50"> Private </NavLink>
+            
+                        <NavLink href="/aws/gallery" ActiveClass="bg-gray-100 text-gray-900" class="group w-full flex items-center pl-11 pr-2 py-2 text-sm font-medium text-gray-600 rounded-md hover:text-gray-900 hover:bg-gray-50"> Gallery </NavLink>
+            
+                    </div>
+                </div>
+            
+                <div>
+                    <!-- Current: "bg-gray-100 text-gray-900", Default: "bg-white text-gray-600 hover:bg-gray-50 hover:text-gray-900" -->
+                    <NavLink href="/azure" ActiveClass="bg-gray-100 text-gray-900" Match="NavLinkMatch.All" class="bg-white text-gray-600 hover:bg-gray-50 hover:text-gray-900 group w-full flex items-center pl-2 pr-1 py-2 text-left text-sm font-medium rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500" aria-controls="sub-menu-2" aria-expanded="false">
+                        <!-- Heroicon name: outline/folder -->
+                        <img src="/img/azure.svg" class="mr-3 flex-shrink-0 h-10 w-24 text-gray-400 group-hover:text-gray-500" />
+                        <span class="flex-1"> </span>
+                    </NavLink>
+                    <!-- Expandable link section, show/hide based on state. -->
+                    <div id="sub-menu-2">
+                        <NavLink href="/azure/public" ActiveClass="bg-gray-100 text-gray-900" class="group w-full flex items-center pl-11 pr-2 py-2 text-sm font-medium text-gray-600 rounded-md hover:text-gray-900 hover:bg-gray-50"> Public </NavLink>
+            
+                        <NavLink href="/azure/private" ActiveClass="bg-gray-100 text-gray-900" class="group w-full flex items-center pl-11 pr-2 py-2 text-sm font-medium text-gray-600 rounded-md hover:text-gray-900 hover:bg-gray-50"> Private </NavLink>
+            
+                        <NavLink href="/azure/gallery" ActiveClass="bg-gray-100 text-gray-900" class="group w-full flex items-center pl-11 pr-2 py-2 text-sm font-medium text-gray-600 rounded-md hover:text-gray-900 hover:bg-gray-50"> Gallery </NavLink>
+                    </div>
+                </div>
+            
+                <div>
+                    <!-- Current: "bg-gray-100 text-gray-900", Default: "bg-white text-gray-600 hover:bg-gray-50 hover:text-gray-900" -->
+                    <NavLink href="/filesystem" ActiveClass="bg-gray-100 text-gray-900" Match="NavLinkMatch.All" class="bg-white text-gray-600 hover:bg-gray-50 hover:text-gray-900 group w-full flex items-center pl-2 pr-1 py-2 text-left text-sm font-medium rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500" aria-controls="sub-menu-3" aria-expanded="false">
+                        <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img" width="2em" height="2em" preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24"><path fill="currentColor" d="M21 8h-2.59l-1-1H15a2.006 2.006 0 0 0-2 2v4a2.006 2.006 0 0 0 2 2h6a2.006 2.006 0 0 0 2-2v-3a2.006 2.006 0 0 0-2-2Zm0 5h-6V9h2l1 1h3Zm0 4h-2.59l-1-1H15a2.006 2.006 0 0 0-2 2v4a2.006 2.006 0 0 0 2 2h6a2.006 2.006 0 0 0 2-2v-3a2.006 2.006 0 0 0-2-2Zm0 5h-6v-4h2l1 1h3ZM8 19v-7h5v-2H8V8H6v13h7v-2H8zm2-18H7.41l-1-1H4a2.006 2.006 0 0 0-2 2v4a2.006 2.006 0 0 0 2 2h6a2.006 2.006 0 0 0 2-2V3a2.006 2.006 0 0 0-2-2Zm0 5H4V2h2l1 1h3Z"/></svg>
+                        <span class="flex-1 px-2 text-lg">   FileSystem </span>
+                    </NavLink>
+                    <div id="sub-menu-3">
+                        <NavLink href="/filesystem/public" ActiveClass="bg-gray-100 text-gray-900" class="group w-full flex items-center pl-11 pr-2 py-2 text-sm font-medium text-gray-600 rounded-md hover:text-gray-900 hover:bg-gray-50"> Public </NavLink>
+            
+                        <NavLink href="/filesystem/private" ActiveClass="bg-gray-100 text-gray-900" class="group w-full flex items-center pl-11 pr-2 py-2 text-sm font-medium text-gray-600 rounded-md hover:text-gray-900 hover:bg-gray-50"> Private </NavLink>
+            
+                        <NavLink href="/filesystem/gallery" ActiveClass="bg-gray-100 text-gray-900" class="group w-full flex items-center pl-11 pr-2 py-2 text-sm font-medium text-gray-600 rounded-md hover:text-gray-900 hover:bg-gray-50"> Gallery </NavLink>
+            
+                    </div>
+                </div>
+            </nav>
+
         </div>
     </div>
-
-    <div>
-        <!-- Current: "bg-gray-100 text-gray-900", Default: "bg-white text-gray-600 hover:bg-gray-50 hover:text-gray-900" -->
-        <NavLink href="/filesystem" class="bg-white text-gray-600 hover:bg-gray-50 hover:text-gray-900 group w-full flex items-center pl-2 pr-1 py-2 text-left text-sm font-medium rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500" aria-controls="sub-menu-3" aria-expanded="false">
-            <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img" width="2em" height="2em" preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24"><path fill="currentColor" d="M21 8h-2.59l-1-1H15a2.006 2.006 0 0 0-2 2v4a2.006 2.006 0 0 0 2 2h6a2.006 2.006 0 0 0 2-2v-3a2.006 2.006 0 0 0-2-2Zm0 5h-6V9h2l1 1h3Zm0 4h-2.59l-1-1H15a2.006 2.006 0 0 0-2 2v4a2.006 2.006 0 0 0 2 2h6a2.006 2.006 0 0 0 2-2v-3a2.006 2.006 0 0 0-2-2Zm0 5h-6v-4h2l1 1h3ZM8 19v-7h5v-2H8V8H6v13h7v-2H8zm2-18H7.41l-1-1H4a2.006 2.006 0 0 0-2 2v4a2.006 2.006 0 0 0 2 2h6a2.006 2.006 0 0 0 2-2V3a2.006 2.006 0 0 0-2-2Zm0 5H4V2h2l1 1h3Z"/></svg>
-            <span class="flex-1 px-2 text-lg">   FileSystem </span>
-        </NavLink>
-        <div id="sub-menu-3">
-            <a href="#" class="group w-full flex items-center pl-11 pr-2 py-2 text-sm font-medium text-gray-600 rounded-md hover:text-gray-900 hover:bg-gray-50"> Public </a>
-
-            <a href="#" class="group w-full flex items-center pl-11 pr-2 py-2 text-sm font-medium text-gray-600 rounded-md hover:text-gray-900 hover:bg-gray-50"> Private </a>
-
-            <a href="#" class="group w-full flex items-center pl-11 pr-2 py-2 text-sm font-medium text-gray-600 rounded-md hover:text-gray-900 hover:bg-gray-50"> Gallery </a>
-
-        </div>
-    </div>
-</nav>
+</div>
 
 @code {
     bool collapseNavMenu = true;
