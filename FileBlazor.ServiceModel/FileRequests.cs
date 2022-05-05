@@ -30,7 +30,7 @@ public class CreateFileSystemFile : ICreateDb<SharedFsFile>, IReturn<SharedFsFil
 {
     public FileAccessType? FileAccessType { get; set; }
     [Input(Type = "file"), UploadTo("fs")]
-    public List<FsFile> AppFiles { get; set; }
+    public FsFile AppFile { get; set; }
 }
 
 [AutoPopulate(nameof(SharedFsFile.AppUserId), Eval = "userAuthId")]
@@ -39,7 +39,7 @@ public class UpdateFileSystemFile : IUpdateDb<SharedFsFile>, IReturn<SharedFsFil
     public int Id { get; set; }
     public FileAccessType? FileAccessType { get; set; }
     [Input(Type = "file"), UploadTo("fs")]
-    public List<FsFile> AppFiles { get; set; }
+    public FsFile AppFile { get; set; }
 }
 
 [AutoPopulate(nameof(SharedS3File.AppUserId), Eval = "userAuthId")]
@@ -57,7 +57,7 @@ public class UpdateS3File : IUpdateDb<SharedS3File>, IReturn<SharedS3File>, ISha
     public int Id { get; set; }
     public FileAccessType? FileAccessType { get; set; }
     [Input(Type = "file"), UploadTo("s3")]
-    public List<S3File> AppFiles { get; set; }
+    public S3File AppFile { get; set; }
 }
 
 [AutoPopulate(nameof(SharedAzureFile.AppUserId), Eval = "userAuthId")]
@@ -65,7 +65,7 @@ public class CreateAzureFile : ICreateDb<SharedAzureFile>, IReturn<SharedAzureFi
 {
     public FileAccessType? FileAccessType { get; set; }
     [Input(Type = "file"), UploadTo("azure")]
-    public List<AzureFile> AppFiles { get; set; }
+    public AzureFile AppFile { get; set; }
 }
 
 [AutoPopulate(nameof(SharedAzureFile.AppUserId), Eval = "userAuthId")]
@@ -74,5 +74,5 @@ public class UpdateAzureFile : IUpdateDb<SharedAzureFile>, IReturn<SharedAzureFi
     public int Id { get; set; }
     public FileAccessType? FileAccessType { get; set; }
     [Input(Type = "file"), UploadTo("azure")]
-    public List<AzureFile> AppFiles { get; set; }
+    public AzureFile AppFile { get; set; }
 }

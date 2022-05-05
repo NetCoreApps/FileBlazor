@@ -52,7 +52,7 @@ namespace FileBlazor.ServiceModel.Types
 
         public FileAccessType? FileAccessType { get; set; }
 
-        [Reference] public List<FsFile> AppFiles { get; set; }
+        [Reference] public FsFile AppFile { get; set; }
 
 
         [Ref(Model = nameof(AppUser), RefId = nameof(AppUser.Id), RefLabel = nameof(AppUser.DisplayName))]
@@ -75,7 +75,7 @@ namespace FileBlazor.ServiceModel.Types
         [AutoIncrement] public int Id { get; set; }
 
         public FileAccessType? FileAccessType { get; set; }
-        [Reference] public List<AzureFile> AppFiles { get; set; }
+        [Reference] public AzureFile AppFile { get; set; }
         public int AppUserId { get; set; }
     }
 
