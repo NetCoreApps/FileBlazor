@@ -1,14 +1,47 @@
 ﻿@page "/aws/{AccessType}"
 @using FileBlazor.ServiceModel.Types
+@using System.IO
+@using System.Net.Http.Headers
+@using System.Text.Json
 @inject ServiceStackStateProvider AuthStateProvider;
 @inject NavigationManager NavigationManager;
 @inherits AppComponentBase
+@inject JsonApiClient jsonApiClient;
 <h3>Aws View - @FileAccessType.ToString()</h3>
 <div>
+    <div class="max-w-xl">
+    <label
+        class="flex justify-center w-full h-32 px-4 transition border-2 border-gray-300 border-dashed rounded-md appearance-none cursor-pointer hover:border-gray-400 focus:outline-none">
+        <span class="flex items-center space-x-2">
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-gray-600" fill="none" viewBox="0 0 24 24"
+                stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round"
+                    d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
+            </svg>
+            <span class="font-medium text-gray-600">
+                Drop files to Attach, or
+                <span class="text-blue-600 underline">browse</span>
+            </span>
+        </span>
+        <InputFile OnChange="@OnChange" class="hidden" @ondragenter="OnDragEnter" @ondragleave="OnDragLeave" @ondragover:preventDefault="true" @ondragend="OnDragLeave" @ondrop:preventDefault="true" />
+    </label>
+</div>
+
     @if(FileAccessType == ServiceModel.Types.FileAccessType.Gallery && AppFiles != null)
     {
-        <GalleryItems AppFiles="AppFiles"></GalleryItems>
+        <GalleryItems AppFiles="GalleryAppFiles"></GalleryItems>
     }
+    @if(FileAccessType == ServiceModel.Types.FileAccessType.Private && AppFiles != null)
+    {
+        <GalleryItems AppFiles="PrivateAppFiles"></GalleryItems>
+    }
+    @if(FileAccessType == ServiceModel.Types.FileAccessType.Public && AppFiles != null)
+    {
+        <GalleryItems AppFiles="PublicAppFiles"></GalleryItems>
+    }
+
+    
+
 </div>
 
 @code {
@@ -17,8 +50,45 @@
 
     private FileAccessType? FileAccessType;
 
-    private List<IAppFile> AppFiles { get; set; }
+    private List<IAppFile> AppFiles { get; set; } = new List<IAppFile>();
+
+    private List<IAppFile> PrivateAppFiles { get; set; } = new List<IAppFile>();
+    private List<IAppFile> PublicAppFiles { get; set; } = new List<IAppFile>();
+    private List<IAppFile> GalleryAppFiles { get; set; } = new List<IAppFile>();
     ResponseStatus? errorStatus;
+
+    private bool dragHover = false;
+    void OnDragEnter(DragEventArgs e)
+    {
+        dragHover = true;
+    }
+    void OnDragLeave(DragEventArgs e)
+    {
+        dragHover = false;
+    }
+
+    private async Task OnChange(InputFileChangeEventArgs e)
+    {
+
+        long maxFileSize = 1024 * 1024 * 15;
+        var req = new CreateS3File
+            {
+                FileAccessType = FileAccessType
+            };
+
+        using var content = new MultipartFormDataContent()
+            .AddParam(nameof(CreateS3File.FileAccessType), req.FileAccessType);
+
+        var file = e.File;
+        using var stream = file.OpenReadStream(maxFileSize);
+        using var ms = new MemoryStream();
+        await stream.CopyToAsync(ms);
+        content.AddFile(nameof(CreateS3File.AppFile), "test.jpg", ms, "image/jpeg");
+
+        var api = await jsonApiClient.ApiFormAsync<CreateS3File>("/api/CreateS3File", content);
+
+        Console.WriteLine("test");
+    }
 
     protected override async Task OnInitializedAsync()
     {
@@ -30,7 +100,11 @@
     {
         var api = await ApiAsync(new QueryAppUserS3File());
         if (api.Succeeded)
-            AppFiles = api.Response!.Results.Select(x => (IAppFile)x).ToList();
+        {
+            GalleryAppFiles.AddRange(api.Response!.Results.Where(x => x.FileAccessType == ServiceModel.Types.FileAccessType.Gallery).Select(x => x.AppFile));
+            PublicAppFiles.AddRange(api.Response!.Results.Where(x => x.FileAccessType == ServiceModel.Types.FileAccessType.Public).Select(x => x.AppFile));
+            PrivateAppFiles.AddRange(api.Response!.Results.Where(x => x.FileAccessType == ServiceModel.Types.FileAccessType.Private).Select(x => x.AppFile));
+        }
         else
             errorStatus = api.Error;
     }

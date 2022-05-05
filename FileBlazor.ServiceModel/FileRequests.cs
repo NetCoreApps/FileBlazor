@@ -1,81 +1,78 @@
-﻿using FileBlazor.ServiceModel.Types;
+﻿using System.Collections.Generic;
+using FileBlazor.ServiceModel.Types;
 using ServiceStack;
 
 namespace FileBlazor.ServiceModel;
+
 
 public class QueryAppUser : QueryDb<AppUser>
 {
 
 }
 
-public class QueryAppUserFile : QueryDb<AppUserFsFile>
+public class QueryAppUserFile : QueryDb<SharedFsFile>
 {
     
 }
 
-public class QueryAppUserS3File : QueryDb<AppUserS3File>
+public class QueryAppUserS3File : QueryDb<SharedS3File>
 {
     
 }
 
-public class QueryAppUserAzureFile : QueryDb<AppUserAzureFile>
+public class QueryAppUserAzureFile : QueryDb<SharedAzureFile>
 {
     
 }
 
-public class CreateFileSystemFile : ICreateDb<AppUserFsFile>, IReturn<AppUserFsFile>, IAppFile
+[AutoPopulate(nameof(SharedFsFile.AppUserId), Eval = "userAuthId")]
+public class CreateFileSystemFile : ICreateDb<SharedFsFile>, IReturn<SharedFsFile>, ISharedFile
 {
     public FileAccessType? FileAccessType { get; set; }
     [Input(Type = "file"), UploadTo("fs")]
-    public string? FilePath { get; set; }
-    [Ref(Model = nameof(AppUser), RefId = nameof(AppUser.Id), RefLabel = nameof(AppUser.DisplayName))]
-    public int AppUserId { get; set; }
+    public List<FsFile> AppFiles { get; set; }
 }
 
-public class UpdateFileSystemFile : IUpdateDb<AppUserFsFile>, IReturn<AppUserFsFile>, IAppFile
+[AutoPopulate(nameof(SharedFsFile.AppUserId), Eval = "userAuthId")]
+public class UpdateFileSystemFile : IUpdateDb<SharedFsFile>, IReturn<SharedFsFile>, ISharedFile
 {
     public int Id { get; set; }
     public FileAccessType? FileAccessType { get; set; }
     [Input(Type = "file"), UploadTo("fs")]
-    public string? FilePath { get; set; }
-    [Ref(Model = nameof(AppUser), RefId = nameof(AppUser.Id), RefLabel = nameof(AppUser.DisplayName))]
-    public int AppUserId { get; set; }
+    public List<FsFile> AppFiles { get; set; }
 }
 
-public class CreateS3File : ICreateDb<AppUserS3File>, IReturn<AppUserS3File>, IAppFile
+[AutoPopulate(nameof(SharedS3File.AppUserId), Eval = "userAuthId")]
+[Route("/upload-create-s3-file")]
+public class CreateS3File : ICreateDb<SharedS3File>, IReturn<SharedS3File>, ISharedFile
 {
     public FileAccessType? FileAccessType { get; set; }
     [Input(Type = "file"), UploadTo("s3")]
-    public string? FilePath { get; set; }
-    [Ref(Model = nameof(AppUser), RefId = nameof(AppUser.Id), RefLabel = nameof(AppUser.DisplayName))]
-    public int AppUserId { get; set; }
+    public S3File AppFile { get; set; }
 }
 
-public class UpdateS3File : IUpdateDb<AppUserS3File>, IReturn<AppUserS3File>, IAppFile
+[AutoPopulate(nameof(SharedS3File.AppUserId), Eval = "userAuthId")]
+public class UpdateS3File : IUpdateDb<SharedS3File>, IReturn<SharedS3File>, ISharedFile
 {
     public int Id { get; set; }
     public FileAccessType? FileAccessType { get; set; }
     [Input(Type = "file"), UploadTo("s3")]
-    public string? FilePath { get; set; }
-    [Ref(Model = nameof(AppUser), RefId = nameof(AppUser.Id), RefLabel = nameof(AppUser.DisplayName))]
-    public int AppUserId { get; set; }
+    public List<S3File> AppFiles { get; set; }
 }
 
-public class CreateAzureFile : ICreateDb<AppUserAzureFile>, IReturn<AppUserAzureFile>, IAppFile
+[AutoPopulate(nameof(SharedAzureFile.AppUserId), Eval = "userAuthId")]
+public class CreateAzureFile : ICreateDb<SharedAzureFile>, IReturn<SharedAzureFile>, ISharedFile
 {
     public FileAccessType? FileAccessType { get; set; }
     [Input(Type = "file"), UploadTo("azure")]
-    public string? FilePath { get; set; }
-    [Ref(Model = nameof(AppUser), RefId = nameof(AppUser.Id), RefLabel = nameof(AppUser.DisplayName))]
-    public int AppUserId { get; set; }
+    public List<AzureFile> AppFiles { get; set; }
 }
 
-public class UpdateAzureFile : IUpdateDb<AppUserAzureFile>, IReturn<AppUserAzureFile>, IAppFile
+[AutoPopulate(nameof(SharedAzureFile.AppUserId), Eval = "userAuthId")]
+public class UpdateAzureFile : IUpdateDb<SharedAzureFile>, IReturn<SharedAzureFile>, ISharedFile
 {
     public int Id { get; set; }
     public FileAccessType? FileAccessType { get; set; }
     [Input(Type = "file"), UploadTo("azure")]
-    public string? FilePath { get; set; }
-    [Ref(Model = nameof(AppUser), RefId = nameof(AppUser.Id), RefLabel = nameof(AppUser.DisplayName))]
-    public int AppUserId { get; set; }
+    public List<AzureFile> AppFiles { get; set; }
 }

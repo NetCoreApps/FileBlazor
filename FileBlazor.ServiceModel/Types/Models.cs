@@ -10,36 +10,72 @@ using System.Runtime.Serialization;
 
 namespace FileBlazor.ServiceModel.Types
 {
-    public class AppUserFsFile : IAppFile
+    public class S3File : IAppFile
     {
-        [AutoIncrement] 
-        public int Id { get; set; }
+        [AutoIncrement] public int Id { get; set; }
+        
+        public string FileName { get; set; }
+        [Format(FormatMethods.Attachment)] public string FilePath { get; set; }
+        public string ContentType { get; set; }
+        [Format(FormatMethods.Bytes)] public long ContentLength { get; set; }
+
+        [References(typeof(SharedS3File))] public int SharedFileId { get; set; }
+    }
+
+    public class FsFile : IAppFile
+    {
+        [AutoIncrement] public int Id { get; set; }
+        
+        public string FileName { get; set; }
+        [Format(FormatMethods.Attachment)] public string FilePath { get; set; }
+        public string ContentType { get; set; }
+        [Format(FormatMethods.Bytes)] public long ContentLength { get; set; }
+
+        [References(typeof(SharedFsFile))] public int SharedFileId { get; set; }
+    }
+
+    public class AzureFile : IAppFile
+    {
+        [AutoIncrement] public int Id { get; set; }
+
+        public string FileName { get; set; }
+        [Format(FormatMethods.Attachment)] public string FilePath { get; set; }
+        public string ContentType { get; set; }
+        [Format(FormatMethods.Bytes)] public long ContentLength { get; set; }
+
+        [References(typeof(SharedAzureFile))] public int SharedFileId { get; set; }
+    }
+
+    public class SharedFsFile : ISharedFile
+    {
+        [AutoIncrement] public int Id { get; set; }
 
         public FileAccessType? FileAccessType { get; set; }
-        [Format(FormatMethods.IconRounded)]
-        public string? FilePath { get; set; }
+
+        [Reference] public List<FsFile> AppFiles { get; set; }
+
+
+        [Ref(Model = nameof(AppUser), RefId = nameof(AppUser.Id), RefLabel = nameof(AppUser.DisplayName))]
         public int AppUserId { get; set; }
     }
 
-    public class AppUserS3File : IAppFile
+    public class SharedS3File : ISharedFile
     {
-        [AutoIncrement] 
-        public int Id { get; set; }
+        [AutoIncrement] public int Id { get; set; }
 
         public FileAccessType? FileAccessType { get; set; }
-        [Format(FormatMethods.IconRounded)]
-        public string? FilePath { get; set; }
+
+        [Reference] 
+        public S3File AppFile { get; set; }
         public int AppUserId { get; set; }
     }
 
-    public class AppUserAzureFile : IAppFile
+    public class SharedAzureFile : ISharedFile
     {
-        [AutoIncrement] 
-        public int Id { get; set; }
+        [AutoIncrement] public int Id { get; set; }
 
         public FileAccessType? FileAccessType { get; set; }
-        [Format(FormatMethods.IconRounded)]
-        public string? FilePath { get; set; }
+        [Reference] public List<AzureFile> AppFiles { get; set; }
         public int AppUserId { get; set; }
     }
 
@@ -50,18 +86,25 @@ namespace FileBlazor.ServiceModel.Types
         Public
     }
 
-    public interface IAppFile
+    public interface ISharedFile
     {
         public FileAccessType? FileAccessType { get; set; }
-        public string? FilePath { get; set; }
-        public int AppUserId { get; set; }
     }
+
+    public interface IAppFile
+    {
+        public int Id { get; set; }
+        public string FileName { get; set; }
+        public string FilePath { get; set; }
+        public string ContentType { get; set; }
+        public long ContentLength { get; set; }
+    }
+
 
     // Custom User Table with extended Metadata properties
     public class AppUser : IUserAuth
     {
-        [AutoIncrement] 
-        public int Id { get; set; }
+        [AutoIncrement] public int Id { get; set; }
         public string DisplayName { get; set; }
 
         [Index]
@@ -105,12 +148,9 @@ namespace FileBlazor.ServiceModel.Types
         public string Nickname { get; set; }
         public string PostalCode { get; set; }
         public string TimeZone { get; set; }
-        [IgnoreDataMember] 
-        public string Salt { get; set; }
-        [IgnoreDataMember] 
-        public string PasswordHash { get; set; }
-        [IgnoreDataMember] 
-        public string DigestHa1Hash { get; set; }
+        [IgnoreDataMember] public string Salt { get; set; }
+        [IgnoreDataMember] public string PasswordHash { get; set; }
+        [IgnoreDataMember] public string DigestHa1Hash { get; set; }
         public List<string> Roles { get; set; } = new();
         public List<string> Permissions { get; set; } = new();
         public DateTime CreatedDate { get; set; }
@@ -118,8 +158,7 @@ namespace FileBlazor.ServiceModel.Types
         public int InvalidLoginAttempts { get; set; }
         public DateTime? LastLoginAttempt { get; set; }
         public DateTime? LockedDate { get; set; }
-        [IgnoreDataMember] 
-        public string RecoveryToken { get; set; }
+        [IgnoreDataMember] public string RecoveryToken { get; set; }
 
         //Custom Reference Data
         public int? RefId { get; set; }

@@ -64,7 +64,7 @@ public class AppHost : AppHostBase, IHostingStartup
 
     private static string ResolveUploadPath(FilesUploadContext ctx)
     {
-        if (ctx.Dto is IAppFile { FileAccessType: { } } createFile)
+        if (ctx.Dto is ISharedFile { FileAccessType: { } } createFile)
         {
             return createFile.FileAccessType != FileAccessType.Private
                 ? ctx.GetLocationPath($"/{createFile.FileAccessType}/{ctx.FileName}")
@@ -76,7 +76,7 @@ public class AppHost : AppHostBase, IHostingStartup
 
     private static void ValidateUpload(IRequest request, IHttpFile file)
     {
-        if (request.Dto is IAppFile createFile)
+        if (request.Dto is ISharedFile createFile)
         {
             var accessType = createFile.FileAccessType;
             var ext = file.FileName.LastRightPart('.');
