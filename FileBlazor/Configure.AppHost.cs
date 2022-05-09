@@ -70,7 +70,7 @@ public class AppHost : AppHostBase, IHostingStartup
             {
                 var accessType = createFile.FileAccessType;
                 var ext = file.FileName.LastRightPart('.');
-                if (accessType == FileAccessType.Gallery && ext != null && FileExt.Images.Contains(ext) == false)
+                if (accessType == FileAccessType.Gallery && ext != null && FileExt.WebImages.Contains(ext) == false)
                     throw new ArgumentException("Supported file extensions: {0}".LocalizeFmt(request, 
                         string.Join(", ", FileExt.Images.Map(x => '.' + x).OrderBy(x => x))), file.FileName);
             }
