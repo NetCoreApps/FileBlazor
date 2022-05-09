@@ -4,18 +4,21 @@
 @inject NavigationManager NavigationManager;
 @inherits AppComponentBase
 @inject JsonApiClient jsonApiClient;
-<h3>File System View - @FileAccessType.ToString()</h3>
+<SetHeader>
+<h1 class="text-2xl font-semibold text-gray-900">File System View - @FileAccessType.ToString()</h1>
+</SetHeader>
+
 @if (FileAccessType == ServiceModel.Types.FileAccessType.Gallery && AppFiles != null)
 {
-    <BucketView Files="GalleryAppFiles" CreateRequest="() => new CreateFileSystemFile { FileAccessType = FileAccessType }" OnUploadComplete="OnUploadComplete" />
+    <BucketView Files="PublicAppFiles" BucketLandingPath="/filesystem" FileAccessType="FileAccessType" CreateRequest="() => new CreateFileSystemFile { FileAccessType = FileAccessType }" OnUploadComplete="OnUploadComplete" />
 }
 @if (FileAccessType == ServiceModel.Types.FileAccessType.Private && AppFiles != null)
 {
-    <BucketView Files="PrivateAppFiles" CreateRequest="() => new CreateFileSystemFile { FileAccessType = FileAccessType }" OnUploadComplete="OnUploadComplete" />
+    <BucketView Files="PublicAppFiles" BucketLandingPath="/filesystem" FileAccessType="FileAccessType" CreateRequest="() => new CreateFileSystemFile { FileAccessType = FileAccessType }" OnUploadComplete="OnUploadComplete" />
 }
 @if (FileAccessType == ServiceModel.Types.FileAccessType.Public && AppFiles != null)
 {
-    <BucketView Files="PublicAppFiles" CreateRequest="() => new CreateFileSystemFile { FileAccessType = FileAccessType }" OnUploadComplete="OnUploadComplete" />
+    <BucketView Files="PublicAppFiles" BucketLandingPath="/filesystem" FileAccessType="FileAccessType" CreateRequest="() => new CreateFileSystemFile { FileAccessType = FileAccessType }" OnUploadComplete="OnUploadComplete" />
 }
 @code {
     [Parameter]
