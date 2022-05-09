@@ -10,11 +10,11 @@
 
 @if (FileAccessType == ServiceModel.Types.FileAccessType.Gallery && AppFiles != null)
 {
-    <BucketView Files="PublicAppFiles" BucketLandingPath="/filesystem" FileAccessType="FileAccessType" CreateRequest="() => new CreateFileSystemFile { FileAccessType = FileAccessType }" OnUploadComplete="OnUploadComplete" />
+    <BucketView Files="GalleryAppFiles" BucketLandingPath="/filesystem" FileAccessType="FileAccessType" CreateRequest="() => new CreateFileSystemFile { FileAccessType = FileAccessType }" OnUploadComplete="OnUploadComplete" />
 }
 @if (FileAccessType == ServiceModel.Types.FileAccessType.Private && AppFiles != null)
 {
-    <BucketView Files="PublicAppFiles" BucketLandingPath="/filesystem" FileAccessType="FileAccessType" CreateRequest="() => new CreateFileSystemFile { FileAccessType = FileAccessType }" OnUploadComplete="OnUploadComplete" />
+    <BucketView Files="PrivateAppFiles" BucketLandingPath="/filesystem" FileAccessType="FileAccessType" CreateRequest="() => new CreateFileSystemFile { FileAccessType = FileAccessType }" OnUploadComplete="OnUploadComplete" />
 }
 @if (FileAccessType == ServiceModel.Types.FileAccessType.Public && AppFiles != null)
 {
