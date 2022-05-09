@@ -1,0 +1,26 @@
+﻿@inherits AppComponentBase
+@using FileBlazor.ServiceModel.Types
+
+<LocodeUpload Request="request" FilePropertyName="AppFile" OnUploadComplete="OnUploadComplete" />
+
+<GalleryItems AppFiles="Files"></GalleryItems>
+
+@code {
+    [Parameter]
+    public Func<ISharedFile> CreateRequest { get; set; }
+
+    [Parameter]
+    public EventCallback OnUploadComplete { get; set; }
+
+    [Parameter]
+    public List<IAppFile> Files { get; set; }
+
+    private ISharedFile request;
+
+    protected override async Task OnParametersSetAsync()
+    {
+        request = CreateRequest();
+        await base.OnParametersSetAsync();
+    }
+
+}

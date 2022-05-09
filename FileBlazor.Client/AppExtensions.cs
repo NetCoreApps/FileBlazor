@@ -1,5 +1,9 @@
 using System;
 using System.Collections.Specialized;
+using System.IO;
+using System.Net;
+using System.Net.Http;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Components;
 using ServiceStack;
 
@@ -26,7 +30,7 @@ public static class AppExtensions
         var returnTo = nav.ToBaseRelativePath(nav.Uri);
         if (returnTo.TrimStart('/').StartsWith("signin"))
             return returnTo;
-        var loginUrl = "/signin" + (!string.IsNullOrEmpty(returnTo) 
+        var loginUrl = "/signin" + (!string.IsNullOrEmpty(returnTo)
                 ? $"?return={returnTo}"
                 : "");
         return loginUrl;
