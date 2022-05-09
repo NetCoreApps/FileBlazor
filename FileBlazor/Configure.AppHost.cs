@@ -98,11 +98,11 @@ public class AppHost : AppHostBase, IHostingStartup
             case FileAccessType.Private:
                 if (userFileAccess.UserAuthId != null && session.UserAuthId == userFileAccess.UserAuthId)
                     return;
-                throw HttpError.NotFound("File not found.");
+                throw HttpError.Forbidden("File is private to user.");
             case FileAccessType.Gallery:
                 if (session.IsAuthenticated)
                     return;
-                throw HttpError.NotFound("File not found.");
+                throw HttpError.Unauthorized("File download requires authentication.");
             case FileAccessType.Public:
                 return;
             default:

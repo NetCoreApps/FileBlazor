@@ -12,7 +12,7 @@
                 <path stroke-linecap="round" stroke-linejoin="round"
                     d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
             </svg>
-            @if(!showProgress)
+            @if(!uploading)
             {
                 <span class="font-medium text-gray-600">
                     Drop files to Attach, or <span class="text-blue-600 underline">browse</span>
@@ -20,18 +20,9 @@
             }
             else
             {
-                if(uploading)
-                {
-                    <span class="font-medium text-gray-600">
-                        Uploading file "@selectedFile"...
-                    </span>
-                }
-                else
-                {
-                    <span class="font-medium text-gray-600">
-                        Upload complete!
-                    </span>
-                }
+                <span class="font-medium text-gray-600">
+                    @progress
+                </span>
             }
             
             
@@ -45,7 +36,6 @@
                 <InputFile id="blazor-input-file" OnChange="@OnChange" class="w-auto absolute opacity-0 h-32" />
             }
     </label>
-    <span class="@(uploading ? "" : "hidden")">@progress</span>
 </div>
 <CascadingValue Value="errorStatus">
     <ErrorSummary />
@@ -60,7 +50,6 @@
 
     ResponseStatus? errorStatus;
 
-    private bool showProgress = false;
     private bool uploading = false;
     private string selectedFile = "";
     // Hack to clear files, avoids issues upload file with same name.
@@ -82,6 +71,7 @@
         try
         {
             uploading = true;
+            progress = "Started...";
             await UploadFile(e);
         }
         catch(Exception ex)
@@ -99,10 +89,14 @@
                     }
                 };
             }
+            progress = $"Failed...";
         }
         finally
         {
+            StateHasChanged();
+            await Task.Delay(3000);
             uploading = false;
+            toggleInputClear = !toggleInputClear;
             StateHasChanged();
         }
     }
@@ -118,7 +112,7 @@
 
         var file = e.File;
         selectedFile = file.Name;
-        showProgress = true;
+        progress = $"Uploading {selectedFile}...";
         if(file.Name.IndexOfAny(Path.GetInvalidFileNameChars()) >= 0)
         {
             throw new Exception("Invalid file name.");
@@ -134,17 +128,9 @@
             errorStatus = api.Error;
 
         StateHasChanged();
+        progress = "Upload complete!";
 
         await OnUploadComplete.InvokeAsync();
         StateHasChanged();
-        await updateStatus();
-        toggleInputClear = !toggleInputClear;
-        StateHasChanged();
-    }
-
-    async Task updateStatus()
-    {
-        await Task.Delay(3000);
-        showProgress = false;
     }
 }
