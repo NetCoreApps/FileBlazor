@@ -8,19 +8,11 @@
     <h1 class="text-2xl font-semibold text-gray-900">Azure View - @FileAccessType.ToString()</h1>
 </SetHeader>
 
-@if (FileAccessType == ServiceModel.Types.FileAccessType.Gallery && AppFiles != null)
-{
-    <BucketView Files="GalleryAppFiles" BucketLandingPath="/azure" FileAccessType="FileAccessType" CreateRequest="() => new CreateAzureFile { FileAccessType = FileAccessType }" OnUploadComplete="OnUploadComplete" />
-}
-@if (FileAccessType == ServiceModel.Types.FileAccessType.Private && AppFiles != null)
-{
-    <BucketView Files="PrivateAppFiles" BucketLandingPath="/azure" FileAccessType="FileAccessType" CreateRequest="() => new CreateAzureFile { FileAccessType = FileAccessType }" OnUploadComplete="OnUploadComplete" />
-}
-@if (FileAccessType == ServiceModel.Types.FileAccessType.Public && AppFiles != null)
-{
-    <BucketView Files="PublicAppFiles" BucketLandingPath="/azure" FileAccessType="FileAccessType" CreateRequest="() => new CreateAzureFile { FileAccessType = FileAccessType }" OnUploadComplete="OnUploadComplete" />
-}
-
+<BucketView Files="AppFiles" 
+            BucketLandingPath="/aws" 
+            FileAccessType="FileAccessType" 
+            CreateRequest="() => new CreateAzureFile { FileAccessType = FileAccessType }" 
+            OnUploadComplete="OnUploadComplete" />
 @code {
     [Parameter]
     public string? AccessType { get; set; }
@@ -29,10 +21,8 @@
 
     private List<IAppFile> AppFiles { get; set; } = new List<IAppFile>();
 
-    private List<IAppFile> PrivateAppFiles { get; set; } = new List<IAppFile>();
-    private List<IAppFile> PublicAppFiles { get; set; } = new List<IAppFile>();
-    private List<IAppFile> GalleryAppFiles { get; set; } = new List<IAppFile>();
     ResponseStatus? errorStatus;
+    bool loading = false;
 
     async Task OnUploadComplete()
     {
@@ -47,18 +37,20 @@
 
     async Task refreshFiles()
     {
-        var api = await ApiAsync(new QueryAppUserAzureFile());
+        loading = true;
+        AppFiles.Clear();
+        var api = await ApiAsync(new QueryAppUserAzureFile
+        {
+            FileAccessType = FileAccessType
+        });
         if (api.Succeeded)
         {
-            GalleryAppFiles.Clear();
-            PublicAppFiles.Clear();
-            PrivateAppFiles.Clear();
-            GalleryAppFiles.AddRange(api.Response!.Results.Where(x => x.FileAccessType == ServiceModel.Types.FileAccessType.Gallery).Select(x => x.AppFile));
-            PublicAppFiles.AddRange(api.Response!.Results.Where(x => x.FileAccessType == ServiceModel.Types.FileAccessType.Public).Select(x => x.AppFile));
-            PrivateAppFiles.AddRange(api.Response!.Results.Where(x => x.FileAccessType == ServiceModel.Types.FileAccessType.Private).Select(x => x.AppFile));
+            AppFiles.AddRange(api.Response!.Results.Select(x => x.AppFile));
         }
         else
             errorStatus = api.Error;
+
+        loading = false;
     }
 
     protected override async Task OnParametersSetAsync()
@@ -69,6 +61,7 @@
         {
             FileAccessType = AccessType.ToEnum<FileAccessType>();
         }
+        await refreshFiles();
         await base.OnParametersSetAsync();
     }
 }
