@@ -12,6 +12,10 @@ using NUnit.Framework;
 using Bunit;
 using static System.Console;
 using RouteAttribute = Microsoft.AspNetCore.Components.RouteAttribute;
+using Microsoft.Extensions.DependencyInjection;
+using FileBlazor.Client;
+using Microsoft.AspNetCore.Components.Rendering;
+using System.Linq;
 
 namespace FileBlazor.Tests;
 
@@ -32,9 +36,35 @@ public class PrerenderTasks
         FileSystemVirtualFiles.RecreateDirectory(PrerenderDir);
     }
 
+    string CreatePageWithLayout<T>(IRenderedComponent<T> renderedComponent) where T : IComponent
+    {
+        var layout = Context.Services.GetRequiredService<ILayoutService>();
+        var builder = new RenderTreeBuilder();
+        layout.Header.Invoke(builder);
+        var frames = builder.GetFrames();
+        string appHeaderHtml = frames.Array.FirstOrDefault().TextContent ?? "";
+
+        var html = @$"
+        <!-- Header Content -->
+        <header class=""bg-gray-50 pb-8 pt-4"">
+            <div class=""max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 xl:flex xl:items-center xl:justify-between"">
+                {appHeaderHtml}
+            </div>
+        </header>
+
+        <!-- Main -->
+        <main class=""pt-8 pb-16"">
+            <div class=""max-w-7xl mx-auto sm:px-6 lg:px-8"">
+                {renderedComponent.Markup}
+            </div>
+        </main>";
+        return html;
+    }
+
     void Render<T>(params ComponentParameter[] parameters) where T : IComponent
     {
         WriteLine($"Rendering: {typeof(T).FullName}...");
+        Context.Services.AddScoped<ILayoutService, LayoutService>();
         var component = Context.RenderComponent<T>(parameters);
         var route = typeof(T).GetCustomAttribute<RouteAttribute>()?.Template;
         if (string.IsNullOrEmpty(route))
@@ -42,9 +72,10 @@ public class PrerenderTasks
 
         var fileName = route.EndsWith("/") ? route + "index.html" : $"{route}.html";
 
+        var html = CreatePageWithLayout(component);
         var writeTo = Path.GetFullPath(PrerenderDir.CombineWith(fileName));
         WriteLine($"Written to {writeTo}");
-        File.WriteAllText(writeTo, component.Markup);
+        File.WriteAllText(writeTo, html);
     }
 
     [Test]
