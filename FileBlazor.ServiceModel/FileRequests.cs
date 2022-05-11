@@ -16,7 +16,6 @@ public class QueryAppFileSystemFiles : QueryDb<SharedFsFile>
     public FileAccessType? FileAccessType { get; set; }
 }
 
-//[AutoPopulate(nameof(AppUserId), Eval = "userAuthId")]
 public class QueryAppUserS3File : QueryDb<SharedS3File>
 {
     public int? AppUserId { get; set; }

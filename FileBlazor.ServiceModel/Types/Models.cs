@@ -15,11 +15,16 @@ namespace FileBlazor.ServiceModel.Types
         [AutoIncrement] public int Id { get; set; }
         
         public string FileName { get; set; }
-        [Format(FormatMethods.Attachment)] public string FilePath { get; set; }
-        public string ContentType { get; set; }
-        [Format(FormatMethods.Bytes)] public long ContentLength { get; set; }
 
-        [References(typeof(SharedS3File))] public int SharedFileId { get; set; }
+        [Format(FormatMethods.Attachment)] 
+        public string FilePath { get; set; }
+        public string ContentType { get; set; }
+
+        [Format(FormatMethods.Bytes)] 
+        public long ContentLength { get; set; }
+
+        [References(typeof(SharedS3File))] 
+        public int SharedFileId { get; set; }
     }
 
     public class FsFile : IAppFile
@@ -27,11 +32,16 @@ namespace FileBlazor.ServiceModel.Types
         [AutoIncrement] public int Id { get; set; }
         
         public string FileName { get; set; }
-        [Format(FormatMethods.Attachment)] public string FilePath { get; set; }
-        public string ContentType { get; set; }
-        [Format(FormatMethods.Bytes)] public long ContentLength { get; set; }
 
-        [References(typeof(SharedFsFile))] public int SharedFileId { get; set; }
+        [Format(FormatMethods.Attachment)] 
+        public string FilePath { get; set; }
+        public string ContentType { get; set; }
+
+        [Format(FormatMethods.Bytes)] 
+        public long ContentLength { get; set; }
+
+        [References(typeof(SharedFsFile))] 
+        public int SharedFileId { get; set; }
     }
 
     public class AzureFile : IAppFile
@@ -39,20 +49,27 @@ namespace FileBlazor.ServiceModel.Types
         [AutoIncrement] public int Id { get; set; }
 
         public string FileName { get; set; }
-        [Format(FormatMethods.Attachment)] public string FilePath { get; set; }
-        public string ContentType { get; set; }
-        [Format(FormatMethods.Bytes)] public long ContentLength { get; set; }
 
-        [References(typeof(SharedAzureFile))] public int SharedFileId { get; set; }
+        [Format(FormatMethods.Attachment)] 
+        public string FilePath { get; set; }
+        public string ContentType { get; set; }
+
+        [Format(FormatMethods.Bytes)] 
+        public long ContentLength { get; set; }
+
+        [References(typeof(SharedAzureFile))] 
+        public int SharedFileId { get; set; }
     }
 
     public class SharedFsFile : ISharedFile
     {
-        [AutoIncrement] public int Id { get; set; }
+        [AutoIncrement] 
+        public int Id { get; set; }
 
         public FileAccessType? FileAccessType { get; set; }
 
-        [Reference] public FsFile AppFile { get; set; }
+        [Reference] 
+        public FsFile AppFile { get; set; }
 
 
         [Ref(Model = nameof(AppUser), RefId = nameof(AppUser.Id), RefLabel = nameof(AppUser.DisplayName))]
@@ -61,7 +78,8 @@ namespace FileBlazor.ServiceModel.Types
 
     public class SharedS3File : ISharedFile
     {
-        [AutoIncrement] public int Id { get; set; }
+        [AutoIncrement] 
+        public int Id { get; set; }
 
         public FileAccessType? FileAccessType { get; set; }
 
@@ -72,17 +90,33 @@ namespace FileBlazor.ServiceModel.Types
 
     public class SharedAzureFile : ISharedFile
     {
-        [AutoIncrement] public int Id { get; set; }
+        [AutoIncrement] 
+        public int Id { get; set; }
 
         public FileAccessType? FileAccessType { get; set; }
-        [Reference] public AzureFile AppFile { get; set; }
+
+        [Reference] 
+        public AzureFile AppFile { get; set; }
         public int AppUserId { get; set; }
     }
 
     public enum FileAccessType
     {
-        Private,
+        /// <summary>
+        /// Example of custom download access control.
+        /// User files can only be downloaded by the user who uploaded them or those with the Admin role.
+        /// User files can be listed by anyone.
+        /// </summary>
+        User,
+        /// <summary>
+        /// Example of custom upload control by file type.
+        /// Files must have a valid web image extension.
+        /// </summary>
         Gallery,
+        /// <summary>
+        /// Example of public shared files.
+        /// Files can be on any type, shared with anonymous users but only uploaded by authenticated users.
+        /// </summary>
         Public
     }
 
@@ -104,7 +138,8 @@ namespace FileBlazor.ServiceModel.Types
     // Custom User Table with extended Metadata properties
     public class AppUser : IUserAuth
     {
-        [AutoIncrement] public int Id { get; set; }
+        [AutoIncrement] 
+        public int Id { get; set; }
         public string DisplayName { get; set; }
 
         [Index]
@@ -148,9 +183,12 @@ namespace FileBlazor.ServiceModel.Types
         public string Nickname { get; set; }
         public string PostalCode { get; set; }
         public string TimeZone { get; set; }
-        [IgnoreDataMember] public string Salt { get; set; }
-        [IgnoreDataMember] public string PasswordHash { get; set; }
-        [IgnoreDataMember] public string DigestHa1Hash { get; set; }
+        [IgnoreDataMember] 
+        public string Salt { get; set; }
+        [IgnoreDataMember] 
+        public string PasswordHash { get; set; }
+        [IgnoreDataMember] 
+        public string DigestHa1Hash { get; set; }
         public List<string> Roles { get; set; } = new();
         public List<string> Permissions { get; set; } = new();
         public DateTime CreatedDate { get; set; }
@@ -158,7 +196,8 @@ namespace FileBlazor.ServiceModel.Types
         public int InvalidLoginAttempts { get; set; }
         public DateTime? LastLoginAttempt { get; set; }
         public DateTime? LockedDate { get; set; }
-        [IgnoreDataMember] public string RecoveryToken { get; set; }
+        [IgnoreDataMember] 
+        public string RecoveryToken { get; set; }
 
         //Custom Reference Data
         public int? RefId { get; set; }

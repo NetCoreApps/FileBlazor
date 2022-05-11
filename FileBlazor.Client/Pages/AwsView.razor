@@ -49,10 +49,18 @@
     {
         loading = true;
         AppFiles.Clear();
-        var api = await ApiAsync(new QueryAppUserS3File
+        var authState = await AuthStateProvider.GetAuthenticationStateAsync();
+        var userId = authState.User.GetUserId();
+        var request = new QueryAppUserS3File
+            {
+                FileAccessType = FileAccessType
+            };
+        // Filter 
+        if(FileAccessType == ServiceModel.Types.FileAccessType.User)
         {
-            FileAccessType = FileAccessType
-        });
+            request.AppUserId = userId == null ? null : int.Parse(userId);
+        }
+        var api = await ApiAsync(request);
         if (api.Succeeded)
         {
             AppFiles.AddRange(api.Response!.Results.Select(x => x.AppFile));

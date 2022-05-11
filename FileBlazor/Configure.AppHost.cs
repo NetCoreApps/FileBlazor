@@ -59,7 +59,7 @@ public class AppHost : AppHostBase, IHostingStartup
 
         static string ResolveUploadPath(FilesUploadContext ctx) =>
             ctx.Dto is ISharedFile { FileAccessType: { } } createFile
-                ? createFile.FileAccessType != FileAccessType.Private
+                ? createFile.FileAccessType != FileAccessType.User
                     ? ctx.GetLocationPath($"/{createFile.FileAccessType}/{ctx.FileName}")
                     : ctx.GetLocationPath($"/{createFile.FileAccessType}/{ctx.UserAuthId}/{ctx.FileName}")
                 : throw HttpError.BadRequest("Invalid file creation request.");
@@ -95,7 +95,7 @@ public class AppHost : AppHostBase, IHostingStartup
         }
         switch (userFileAccess.AccessType)
         {
-            case FileAccessType.Private:
+            case FileAccessType.User:
                 if (userFileAccess.UserAuthId != null && session.UserAuthId == userFileAccess.UserAuthId)
                     return;
                 throw HttpError.Forbidden("File is private to user.");
@@ -120,7 +120,7 @@ public class AppHost : AppHostBase, IHostingStartup
         var access = segments[1];
         var firstSeg = segments[2];
         var accessType = access.ToEnum<FileAccessType>();
-        return new UserFileAccess(accessType == FileAccessType.Private ? firstSeg : null, accessType);
+        return new UserFileAccess(accessType == FileAccessType.User ? firstSeg : null, accessType);
     }
 
     public void Configure(IWebHostBuilder builder) => builder
