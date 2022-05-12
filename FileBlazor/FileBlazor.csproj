@@ -11,6 +11,7 @@
     </ItemGroup>
 
     <ItemGroup>
+        <PackageReference Include="Bogus" Version="34.0.2" />
         <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Server" Version="6.0.0" />
         <PackageReference Include="ServiceStack" Version="6.*" />
         <PackageReference Include="ServiceStack.OrmLite.Sqlite.Data" Version="6.*" />
@@ -21,6 +22,29 @@
         <ProjectReference Include="..\FileBlazor.Client\FileBlazor.Client.csproj" />
         <ProjectReference Include="..\FileBlazor.ServiceInterface\FileBlazor.ServiceInterface.csproj" />
         <ProjectReference Include="..\FileBlazor.ServiceModel\FileBlazor.ServiceModel.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Content Remove="wwwroot\profiles\takashi-miyazaki-93-nUbomATA-unsplash.jpg" />
+      <Content Remove="wwwroot\profiles\roman-holoschchuk-O-98kcPe0P8-unsplash.jpg" />
+      <Content Remove="wwwroot\profiles\reza-biazar-eSjmZW97cH8-unsplash.jpg" />
+      <Content Remove="wwwroot\profiles\peter-john-manlapig-KRBHTbLTMDs-unsplash.jpg" />
+      <Content Remove="wwwroot\profiles\omid-armin-VS4Bg3tWWcI-unsplash.jpg" />
+      <Content Remove="wwwroot\profiles\mateus-campos-felipe-JoM_lC1WAnE-unsplash.jpg" />
+      <Content Remove="wwwroot\profiles\luke-braswell-oYFv-_JKsVk-unsplash.jpg" />
+      <Content Remove="wwwroot\profiles\joseph-gonzalez-iFgRcqHznqg-unsplash.jpg" />
+      <Content Remove="wwwroot\profiles\joel-mott-LaK153ghdig-unsplash.jpg" />
+      <Content Remove="wwwroot\profiles\janko-ferlic-mIs_QHS1ht8-unsplash.jpg" />
+      <Content Remove="wwwroot\profiles\hisu-lee-u6LGX2VMOP4-unsplash.jpg" />
+      <Content Remove="wwwroot\profiles\engin-akyurt-ljkKZUU6AkQ-unsplash.jpg" />
+      <Content Remove="wwwroot\profiles\engin-akyurt-UJavPBeDsT8-unsplash.jpg" />
+      <Content Remove="wwwroot\profiles\de-andre-bush-baeDx6LuSt4-unsplash.jpg" />
+      <Content Remove="wwwroot\profiles\christopher-campbell-rDEOVtE7vOs-unsplash.jpg" />
+      <Content Remove="wwwroot\profiles\charles-etoroma-95UF6LXe-Lo-unsplash.jpg" />
+      <Content Remove="wwwroot\profiles\askar-ulzhabayev-mOnHNBhyjgM-unsplash.jpg" />
+      <Content Remove="wwwroot\profiles\art-hauntington-jzY0KRJopEI-unsplash.jpg" />
+      <Content Remove="wwwroot\profiles\angelina-litvin-52R7t7x8CPI-unsplash.jpg" />
+      <Content Remove="wwwroot\profiles\7.jpg" />
     </ItemGroup>
     
     <PropertyGroup>

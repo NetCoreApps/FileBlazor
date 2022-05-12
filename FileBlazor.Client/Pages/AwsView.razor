@@ -13,11 +13,37 @@
 
 <div>
 
+    @if(FileAccessType == ServiceModel.Types.FileAccessType.Team)
+    {
+        <div>
+
+        <div>
+            <label class="text-base font-medium text-gray-900">Team Selection</label>
+            <p class="text-sm leading-5 text-gray-500">Upload file for which team?</p>
+            <fieldset class="mt-4">
+                <legend class="sr-only">Role selection</legend>
+                <div class="space-y-4 sm:flex sm:items-center sm:space-y-0 sm:space-x-10">
+                    @foreach (var role in userRoles)
+                    {
+                        <div class="flex items-center">
+                            <input id="@role" name="fileRole" value="@role" type="radio" checked="@(roleSelection == role)" 
+                            @onchange="() => roleSelection = role"
+                            class="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300">
+                            <label for="email" class="ml-3 block text-sm font-medium text-gray-700"> @role </label>
+                        </div>
+                    }
+
+                </div>
+            </fieldset>
+        </div>
+    </div>
+    }
+
     
 <BucketView Files="AppFiles" 
             BucketLandingPath="/aws" 
             FileAccessType="FileAccessType" 
-            CreateRequest="() => new CreateS3File { FileAccessType = FileAccessType }" 
+            CreateRequest="() => new CreateS3FileItem { FileAccessType = FileAccessType, RoleName = roleSelection }" 
             OnUploadComplete="OnUploadComplete" />
 
 </div>
@@ -28,11 +54,22 @@
 
     private FileAccessType? FileAccessType;
 
-    private List<IAppFile> AppFiles { get; set; } = new List<IAppFile>();
+    private List<FileItemWithFile> AppFiles { get; set; } = new List<FileItemWithFile>();
 
     ResponseStatus? errorStatus;
 
     bool loading = false;
+
+    private List<string> userRoles = new();
+
+    private string roleSelection = "";
+
+    async Task populateRoles()
+    {
+        var authState = await AuthStateProvider.GetAuthenticationStateAsync();
+        userRoles = authState.User.GetRoles().ToList();
+        roleSelection = userRoles.IsEmpty() ? "" : userRoles[0];
+    }
 
     async Task OnUploadComplete()
     {
@@ -41,7 +78,9 @@
 
     protected override async Task OnInitializedAsync()
     {
-        await refreshFiles();
+        if(FileAccessType != null)
+            await refreshFiles();
+        await populateRoles();
         await base.OnInitializedAsync();
     }
 
@@ -51,19 +90,34 @@
         AppFiles.Clear();
         var authState = await AuthStateProvider.GetAuthenticationStateAsync();
         var userId = authState.User.GetUserId();
-        var request = new QueryAppUserS3File
+        ApiResult<QueryResponse<S3FileItem>> apiFileItem;
+        var request = new QueryS3FileItems
             {
                 FileAccessType = FileAccessType
             };
+        if(authState.IsAuthenticated())
+        {
+            apiFileItem = await ApiAsync(new QueryS3FileItems
+            {
+                FileAccessType = FileAccessType
+            });
+        }
+        else
+        {
+            apiFileItem = await ApiAsync(new QueryPublicS3FileItems()
+            {
+
+            });
+        }
         // Filter 
-        if(FileAccessType == ServiceModel.Types.FileAccessType.User)
+        if(FileAccessType == ServiceModel.Types.FileAccessType.Private)
         {
             request.AppUserId = userId == null ? null : int.Parse(userId);
         }
         var api = await ApiAsync(request);
         if (api.Succeeded)
         {
-            AppFiles.AddRange(api.Response!.Results.Select(x => x.AppFile));
+            AppFiles.AddRange(api.Response!.Results.Select(x => new FileItemWithFile(x, x.AppFile)));
         }
         else
             errorStatus = api.Error;
@@ -79,7 +133,8 @@
         {
             FileAccessType = AccessType.ToEnum<FileAccessType>();
         }
-        await refreshFiles();
+        if(FileAccessType != null)
+            await refreshFiles();
         await base.OnParametersSetAsync();
     }
 }

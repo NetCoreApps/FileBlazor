@@ -9,9 +9,9 @@
 </SetHeader>
 
 <BucketView Files="AppFiles" 
-            BucketLandingPath="/aws" 
+            BucketLandingPath="/filesystem" 
             FileAccessType="FileAccessType" 
-            CreateRequest="() => new CreateFileSystemFile { FileAccessType = FileAccessType }" 
+            CreateRequest="() => new CreateFileSystemFileItem { FileAccessType = FileAccessType }" 
             OnUploadComplete="OnUploadComplete" />
 
 @code {
@@ -20,7 +20,7 @@
 
     private FileAccessType? FileAccessType;
 
-    private List<IAppFile> AppFiles { get; set; } = new List<IAppFile>();
+    private List<FileItemWithFile> AppFiles { get; set; } = new List<FileItemWithFile>();
 
     ResponseStatus? errorStatus;
     bool loading = false;
@@ -40,13 +40,13 @@
     {
         loading = true;
         AppFiles.Clear();
-        var api = await ApiAsync(new QueryAppFileSystemFiles
+        var api = await ApiAsync(new QueryFileSystemFileItems
         {
             FileAccessType = FileAccessType
         });
         if (api.Succeeded)
         {
-            AppFiles.AddRange(api.Response!.Results.Select(x => x.AppFile));
+            AppFiles.AddRange(api.Response!.Results.Select(x => new FileItemWithFile(x, x.AppFile)));
         }
         else
             errorStatus = api.Error;

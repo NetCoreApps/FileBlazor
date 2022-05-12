@@ -27,7 +27,8 @@ public class AppHost : AppHostBase, IHostingStartup
         SetConfig(new HostConfig { });
 
         Plugins.Add(new CorsFeature(allowedHeaders: "Content-Type,Authorization",
-            allowOriginWhitelist: new[] {
+            allowOriginWhitelist: new[]
+            {
                 "http://localhost:5000",
                 "https://localhost:5001",
                 "https://" + Environment.GetEnvironmentVariable("DEPLOY_CDN")
@@ -54,24 +55,31 @@ public class AppHost : AppHostBase, IHostingStartup
                 validateUpload: ValidateUpload, validateDownload: ValidateDownload),
             new UploadLocation("fs", appFs,
                 readAccessRole: RoleNames.AllowAnon, resolvePath: ResolveUploadPath,
-                validateUpload: ValidateUpload, validateDownload: ValidateDownload)
+                validateUpload: ValidateUpload, validateDownload: ValidateDownload),
+            // User profiles
+            new UploadLocation("users", appFs, allowExtensions: FileExt.WebImages,
+                resolvePath: ctx => $"/profiles/users/{ctx.UserAuthId}.{ctx.FileExtension}")
         ));
 
-        static string ResolveUploadPath(FilesUploadContext ctx) =>
-            ctx.Dto is ISharedFile { FileAccessType: { } } createFile
-                ? createFile.FileAccessType != FileAccessType.User
+        static string ResolveUploadPath(FilesUploadContext ctx)
+        {
+            if (ctx.Dto is IFileItemRequest { FileAccessType: { } } createFile)
+            {
+                return createFile.FileAccessType != FileAccessType.Private
                     ? ctx.GetLocationPath($"/{createFile.FileAccessType}/{ctx.FileName}")
-                    : ctx.GetLocationPath($"/{createFile.FileAccessType}/{ctx.UserAuthId}/{ctx.FileName}")
-                : throw HttpError.BadRequest("Invalid file creation request.");
+                    : ctx.GetLocationPath($"/{createFile.FileAccessType}/{ctx.UserAuthId}/{ctx.FileName}");
+            }
+            throw HttpError.BadRequest("Invalid file creation request.");
+        }
 
         static void ValidateUpload(IRequest request, IHttpFile file)
         {
-            if (request.Dto is ISharedFile createFile)
+            if (request.Dto is IFileItemRequest createFile)
             {
                 var accessType = createFile.FileAccessType;
                 var ext = file.FileName.LastRightPart('.');
-                if (accessType == FileAccessType.Gallery && ext != null && FileExt.WebImages.Contains(ext) == false)
-                    throw new ArgumentException("Supported file extensions: {0}".LocalizeFmt(request, 
+                if (accessType == FileAccessType.Team && ext != null && FileExt.WebImages.Contains(ext) == false)
+                    throw new ArgumentException("Supported file extensions: {0}".LocalizeFmt(request,
                         string.Join(", ", FileExt.Images.Map(x => '.' + x).OrderBy(x => x))), file.FileName);
             }
             else
@@ -93,13 +101,14 @@ public class AppHost : AppHostBase, IHostingStartup
             logger.LogWarning("Invalid file download path request: {PathInfo}", request.PathInfo);
             throw HttpError.NotFound("File not found.");
         }
+
         switch (userFileAccess.AccessType)
         {
-            case FileAccessType.User:
+            case FileAccessType.Private:
                 if (userFileAccess.UserAuthId != null && session.UserAuthId == userFileAccess.UserAuthId)
                     return;
                 throw HttpError.Forbidden("File is private to user.");
-            case FileAccessType.Gallery:
+            case FileAccessType.Team:
                 if (session.IsAuthenticated)
                     return;
                 throw HttpError.Unauthorized("File download requires authentication.");
@@ -120,7 +129,7 @@ public class AppHost : AppHostBase, IHostingStartup
         var access = segments[1];
         var firstSeg = segments[2];
         var accessType = access.ToEnum<FileAccessType>();
-        return new UserFileAccess(accessType == FileAccessType.User ? firstSeg : null, accessType);
+        return new UserFileAccess(accessType == FileAccessType.Private ? firstSeg : null, accessType);
     }
 
     public void Configure(IWebHostBuilder builder) => builder

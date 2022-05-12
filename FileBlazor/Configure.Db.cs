@@ -19,7 +19,7 @@ namespace FileBlazor
             {
                 // Create non-existing Table and add Seed Data Example
                 using var db = appHost.Resolve<IDbConnectionFactory>().Open();                
-                if(db.CreateTableIfNotExists<FsFile>())
+                if(db.CreateTableIfNotExists<FileSystemFile>())
                 {
 
                 }
@@ -27,19 +27,19 @@ namespace FileBlazor
                 {
 
                 }
-                if(db.CreateTableIfNotExists<AzureFile>())
+                if(db.CreateTableIfNotExists<AzureFileItem>())
                 {
 
                 }
-                if (db.CreateTableIfNotExists<SharedFsFile>())
+                if (db.CreateTableIfNotExists<FileSystemFileItem>())
                 {
                     
                 }
-                if (db.CreateTableIfNotExists<SharedS3File>())
+                if (db.CreateTableIfNotExists<S3FileItem>())
                 {
                     
                 }
-                if (db.CreateTableIfNotExists<SharedAzureFile>())
+                if (db.CreateTableIfNotExists<AzureFileItem>())
                 {
                     
                 }
