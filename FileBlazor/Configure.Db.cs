@@ -27,7 +27,7 @@ namespace FileBlazor
                 {
 
                 }
-                if(db.CreateTableIfNotExists<AzureFileItem>())
+                if(db.CreateTableIfNotExists<AzureFile>())
                 {
 
                 }

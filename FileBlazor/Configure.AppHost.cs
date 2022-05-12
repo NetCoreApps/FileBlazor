@@ -34,6 +34,12 @@ public class AppHost : AppHostBase, IHostingStartup
                 "https://" + Environment.GetEnvironmentVariable("DEPLOY_CDN")
             }, allowCredentials: true));
 
+        ConfigurePlugin<UiFeature>(feature =>
+                    feature.Info.BrandIcon = new ImageInfo
+                    {
+                        Svg = "/img/blazor.svg",
+                    });
+
         var awsAccessKeyId = Environment.GetEnvironmentVariable("AWS_ACCESS_KEY_ID") ??
                              Environment.GetEnvironmentVariable("LOCAL_AWS_ACCESS_KEY_ID");
         var awsSecretAccessKey = Environment.GetEnvironmentVariable("AWS_SECRET_ACCESS_KEY") ??
