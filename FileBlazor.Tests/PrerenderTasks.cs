@@ -40,7 +40,7 @@ public class PrerenderTasks
     {
         var layout = Context.Services.GetRequiredService<ILayoutService>();
         var builder = new RenderTreeBuilder();
-        layout.Header.Invoke(builder);
+        layout.Header?.Invoke(builder);
         var frames = builder.GetFrames();
         string appHeaderHtml = frames.Array.FirstOrDefault().TextContent ?? "";
 
