@@ -5,16 +5,45 @@
 @inherits AppComponentBase
 @inject JsonApiClient jsonApiClient;
 <SetHeader>
-<h1 class="text-2xl font-semibold text-gray-900">File System View - @FileAccessType.ToString()</h1>
+    <h1 class="text-2xl font-semibold text-gray-900">File System View - @FileAccessType.ToString()</h1>
 </SetHeader>
 
-<BucketView Files="AppFiles" 
-            BucketLandingPath="/filesystem" 
-            FileAccessType="FileAccessType" 
-            CreateRequest="() => new CreateFileSystemFileItem { FileAccessType = FileAccessType }" 
-            OnUploadComplete="OnUploadComplete" />
+<div>
+    @if (FileAccessType == ServiceModel.Types.FileAccessType.Team)
+    {
+        <div>
+
+            <div>
+                <label class="text-base font-medium text-gray-900">Team Selection</label>
+                <p class="text-sm leading-5 text-gray-500">Upload file for which team?</p>
+                <fieldset class="mt-4">
+                    <legend class="sr-only">Role selection</legend>
+                    <div class="space-y-4 sm:flex sm:items-center sm:space-y-0 sm:space-x-10">
+                        @foreach (var role in userRoles)
+                        {
+                            <div class="flex items-center">
+                                <input id="@role" name="fileRole" value="@role" type="radio" checked="@(roleSelection == role)"
+                                       @onchange="() => roleSelection = role"
+                                       class="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300">
+                                <label for="@role" class="ml-3 block text-sm font-medium text-gray-700"> @role </label>
+                            </div>
+                        }
+
+                    </div>
+                </fieldset>
+            </div>
+        </div>
+    }
+    <BucketView Files="AppFiles"
+                BucketLandingPath="/filesystem"
+                FileAccessType="FileAccessType"
+                CreateRequest="() => new CreateFileSystemFileItem { FileAccessType = FileAccessType }"
+                OnUploadComplete="OnUploadComplete"/>
+</div>
+
 
 @code {
+
     [Parameter]
     public string? AccessType { get; set; }
 
@@ -30,9 +59,21 @@
         await refreshFiles();
     }
 
+    private List<string> userRoles = new();
+
+    private string roleSelection = "";
+
+    async Task populateRoles()
+    {
+        var authState = await AuthStateProvider.GetAuthenticationStateAsync();
+        userRoles = authState.User.GetRoles().ToList();
+        roleSelection = userRoles.IsEmpty() ? "" : userRoles[0];
+    }
+
     protected override async Task OnInitializedAsync()
     {
         await refreshFiles();
+        await populateRoles();
         await base.OnInitializedAsync();
     }
 
@@ -40,16 +81,30 @@
     {
         loading = true;
         AppFiles.Clear();
-        var api = await ApiAsync(new QueryFileSystemFileItems
+        var authState = await AuthStateProvider.GetAuthenticationStateAsync();
+        var userId = authState.User.GetUserId();
+        ApiResult<QueryResponse<FileSystemFileItem>> apiFileItem;
+
+        if (authState.IsAuthenticated())
         {
-            FileAccessType = FileAccessType
-        });
-        if (api.Succeeded)
-        {
-            AppFiles.AddRange(api.Response!.Results.Select(x => new FileItemWithFile(x, x.AppFile)));
+            apiFileItem = await ApiAsync(new QueryFileSystemFileItems()
+            {
+                FileAccessType = FileAccessType,
+                AppUserId = FileAccessType == ServiceModel.Types.FileAccessType.Private ?
+                    int.Parse(userId) : null
+            });
         }
         else
-            errorStatus = api.Error;
+        {
+            apiFileItem = await ApiAsync(new QueryPublicFileSystemFileItems());
+        }
+
+        if (apiFileItem.Succeeded)
+        {
+            AppFiles.AddRange(apiFileItem.Response!.Results.Select(x => new FileItemWithFile(x, x.AppFile)));
+        }
+        else
+            errorStatus = apiFileItem.Error;
 
         loading = false;
     }
@@ -65,4 +120,4 @@
         await refreshFiles();
         await base.OnParametersSetAsync();
     }
-}
+    } 
