@@ -1,8 +1,9 @@
 ﻿@using FileBlazor.ServiceModel.Types
-
+<h3 class="leading-6 font-medium text-gray-900 @(SearchTerm.IsNullOrEmpty() ? "hidden" : "")">Search results</h3>
 <div class="max-w-7xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
+    
     <ul role="list" class="grid grid-cols-2 gap-x-4 gap-y-8 sm:grid-cols-3 sm:gap-x-6 lg:grid-cols-4 xl:gap-x-8">
-        @foreach (var appFile in AppFiles)
+        @foreach (var appFile in filteredFiles)
         {
             <li class="relative">
                 <div class="group block w-full aspect-w-10 aspect-h-7 rounded-lg bg-gray-100 focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-offset-gray-100 focus-within:ring-indigo-500 overflow-hidden">
@@ -17,9 +18,9 @@
                         </svg>
                     }
 
-                    <button type="button" class="absolute inset-0 focus:outline-none">
-                        <span class="sr-only">View details for @appFile.File.FilePath.LastRightPart("/")</span>
-                    </button>
+                    <a target="_blank" href="@appFile.File.FilePath" class="absolute inset-0 focus:outline-none">
+                        <span class="sr-only">Download @appFile.File.FilePath.LastRightPart("/")</span>
+                    </a>
                 </div>
                 <div class="w-full flex">
                     <div class="flex-1 flex-grow truncate">
@@ -28,7 +29,7 @@
                         <p class="block text-sm font-medium text-gray-500 pointer-events-none">@appFile.FileItem.RoleName</p>
                     </div>
                     <div class="flex-shrink-0">
-                        <img class="inline-block mt-2 h-8 w-8 rounded-full flex-shrink-0" src="@appFile.FileItem.User.ProfileUrl" alt="" title="@appFile.FileItem.User.DisplayName">
+                        <img class="inline-block mt-2 h-8 w-8 rounded-full flex-shrink-0" src="@appFile.FileItem.User.ProfileUrl" alt="" title="Uploaded by @appFile.FileItem.User.DisplayName">
                     </div>
                 </div>
             </li>
@@ -41,6 +42,29 @@
 
     [Parameter]
     public List<FileItemWithFile> AppFiles { get; set; }
+
+    [Parameter]
+    public string SearchTerm { get; set; } = "";
+
+    protected override async Task OnParametersSetAsync()
+    {
+        await base.OnParametersSetAsync();
+        updateFilteredAppFiles();
+    }
+
+    private List<FileItemWithFile> filteredFiles { get; set; } = new();
+
+    void updateFilteredAppFiles()
+    {
+        var result = new List<FileItemWithFile>();
+        if (!SearchTerm.IsNullOrEmpty())
+            result = AppFiles.Where(x => x.File.FileName.Contains(SearchTerm, StringComparison.InvariantCultureIgnoreCase) || 
+            (x.FileItem.RoleName != null && x.FileItem.RoleName.Contains(SearchTerm))).ToList();
+        else
+            result = AppFiles;
+        filteredFiles.Clear();
+        filteredFiles.AddRange(result);
+    }
 
     public static string[] WebImages { get; set; } = new[]
     {

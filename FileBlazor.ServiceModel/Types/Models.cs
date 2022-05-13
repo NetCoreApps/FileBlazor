@@ -145,9 +145,11 @@ namespace FileBlazor.ServiceModel.Types
 
     public interface IFileItem
     {
+        public int Id { get; set; }
         public FileAccessType? FileAccessType { get; set; }
         public string? RoleName { get; set; }
         public AppUser User { get; set; }
+        public int AppUserId { get; set; }
     }
 
     public interface IFileItemRequest
@@ -163,6 +165,7 @@ namespace FileBlazor.ServiceModel.Types
         public string FilePath { get; set; }
         public string ContentType { get; set; }
         public long ContentLength { get; set; }
+        public int SharedFileId { get; set; }
     }
 
 

@@ -19,13 +19,13 @@
     </div>
   </div>
 </div>
-        <GalleryItems AppFiles="Files"></GalleryItems>
+        <GalleryItems AppFiles="Files" SearchTerm="@(SearchTerm)"></GalleryItems>
     </Authorized>
     <Authorizing>Loading...</Authorizing>
     <NotAuthorized>
         @if(FileAccessType == ServiceModel.Types.FileAccessType.Public)
         {
-            <GalleryItems AppFiles="Files"></GalleryItems>
+            <GalleryItems AppFiles="Files" SearchTerm="@(SearchTerm)"></GalleryItems>
         }
         else
         {
@@ -51,6 +51,9 @@
 
     [Parameter]
     public string BucketLandingPath { get; set; }
+
+    [Parameter]
+    public string SearchTerm { get; set; } = "";
 
     private IFileItemRequest request;
 

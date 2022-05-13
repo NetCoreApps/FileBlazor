@@ -17,10 +17,11 @@ public class QueryPublicFileSystemFileItems : QueryDb<FileSystemFileItem>
 }
 
 [ValidateIsAuthenticated]
-public class QueryFileSystemFileItems : QueryDb<FileSystemFileItem>
+public class QueryFileSystemFileItems : QueryDb<FileSystemFileItem>, IQueryFileItem
 {
     public int? AppUserId { get; set; }
     public FileAccessType? FileAccessType { get; set; }
+    public string? FileName { get; set; }
 }
 
 [AutoFilter(QueryTerm.Ensure, nameof(FileAccessType), Value = FileAccessType.Public)]
@@ -29,11 +30,19 @@ public class QueryPublicS3FileItems : QueryDb<S3FileItem>
     public FileAccessType? FileAccessTypes { get; set; }
 }
 
-[ValidateIsAuthenticated]
-public class QueryS3FileItems : QueryDb<S3FileItem>
+public interface IQueryFileItem
 {
     public int? AppUserId { get; set; }
     public FileAccessType? FileAccessType { get; set; }
+    public string? FileName { get; set; }
+}
+
+[ValidateIsAuthenticated]
+public class QueryS3FileItems : QueryDb<S3FileItem>, IQueryFileItem
+{
+    public int? AppUserId { get; set; }
+    public FileAccessType? FileAccessType { get; set; }
+    public string? FileName { get; set; }
 }
 
 [AutoFilter(QueryTerm.Ensure, nameof(FileAccessType), Value = FileAccessType.Public)]
@@ -43,10 +52,11 @@ public class QueryPublicAzureFileItems : QueryDb<AzureFileItem>
 }
 
 [ValidateIsAuthenticated]
-public class QueryAzureFileItems : QueryDb<AzureFileItem>
+public class QueryAzureFileItems : QueryDb<AzureFileItem>, IQueryFileItem
 {
     public int? AppUserId { get; set; }
     public FileAccessType? FileAccessType { get; set; }
+    public string? FileName { get; set; }
 }
 
 [AutoPopulate(nameof(FileSystemFileItem.AppUserId), Eval = "userAuthId")]

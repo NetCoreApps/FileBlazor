@@ -55,16 +55,20 @@ public class AppHost : AppHostBase, IHostingStartup
         Plugins.Add(new FilesUploadFeature(
             new UploadLocation("azure", azureBlobVfs,
                 readAccessRole: RoleNames.AllowAnon, resolvePath: ResolveUploadPath,
-                validateUpload: ValidateUpload, validateDownload: ValidateDownload),
+                validateUpload: ValidateUpload, validateDownload: ValidateDownload,
+                maxFileBytes: 10 * 1024 * 1024),
             new UploadLocation("s3", s3DataVfs,
                 readAccessRole: RoleNames.AllowAnon, resolvePath: ResolveUploadPath,
-                validateUpload: ValidateUpload, validateDownload: ValidateDownload),
+                validateUpload: ValidateUpload, validateDownload: ValidateDownload,
+                maxFileBytes: 10 * 1024 * 1024),
             new UploadLocation("fs", appFs,
                 readAccessRole: RoleNames.AllowAnon, resolvePath: ResolveUploadPath,
-                validateUpload: ValidateUpload, validateDownload: ValidateDownload),
+                validateUpload: ValidateUpload, validateDownload: ValidateDownload,
+                maxFileBytes: 10 * 1024 * 1024),
             // User profiles
             new UploadLocation("users", appFs, allowExtensions: FileExt.WebImages,
-                resolvePath: ctx => $"/profiles/users/{ctx.UserAuthId}.{ctx.FileExtension}")
+                resolvePath: ctx => $"/profiles/users/{ctx.UserAuthId}.{ctx.FileExtension}",
+                maxFileBytes: 10 * 1024 * 1024)
         ));
 
         static string ResolveUploadPath(FilesUploadContext ctx)
@@ -86,7 +90,7 @@ public class AppHost : AppHostBase, IHostingStartup
                 var ext = file.FileName.LastRightPart('.');
                 if (accessType == FileAccessType.Team && ext != null && FileExt.WebImages.Contains(ext) == false)
                     throw new ArgumentException("Supported file extensions: {0}".LocalizeFmt(request,
-                        string.Join(", ", FileExt.Images.Map(x => '.' + x).OrderBy(x => x))), file.FileName);
+                        string.Join(", ", FileExt.WebImages.Map(x => '.' + x).OrderBy(x => x))), file.FileName);
             }
             else
                 throw new HttpError("Invalid request.");

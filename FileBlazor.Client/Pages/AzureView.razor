@@ -6,6 +6,7 @@
 @inject JsonApiClient jsonApiClient;
 <SetHeader>
     <h1 class="text-2xl font-semibold text-gray-900">Azure View - @FileAccessType.ToString()</h1>
+    <SearchFiles OnSearch="performSearch"></SearchFiles>
 </SetHeader>
 
 <div>
@@ -38,8 +39,9 @@
     <BucketView Files="AppFiles"
                 BucketLandingPath="/azure"
                 FileAccessType="FileAccessType"
-                CreateRequest="() => new CreateAzureFileItem { FileAccessType = FileAccessType }"
-                OnUploadComplete="OnUploadComplete"/>
+                CreateRequest="createRequest"
+                OnUploadComplete="OnUploadComplete"
+                SearchTerm="@(searchTerm)"/>
 </div>
 
 
@@ -52,6 +54,12 @@
 
     private List<FileItemWithFile> AppFiles { get; set; } = new List<FileItemWithFile>();
 
+    private string searchTerm;
+
+    private List<string> userRoles = new();
+
+    private string roleSelection = "";
+
     ResponseStatus? errorStatus;
     bool loading = false;
 
@@ -60,9 +68,18 @@
         await refreshFiles();
     }
 
-    private List<string> userRoles = new();
+    CreateAzureFileItem createRequest()
+    {
+        return new CreateAzureFileItem { 
+            FileAccessType = FileAccessType, 
+            RoleName = FileAccessType == ServiceModel.Types.FileAccessType.Team ? roleSelection : null 
+        };
+    }
 
-    private string roleSelection = "";
+    void performSearch(string searchTerm)
+    {
+        this.searchTerm = searchTerm;
+    }
 
     async Task populateRoles()
     {

@@ -27,7 +27,25 @@ public class MyServices : Service
 
     public object Get(QueryS3FileItems request)
     {
-        var q = AutoQuery.CreateQuery(request, Request.GetRequestParams(), Request);
+        return QueryFiles<QueryS3FileItems,S3FileItem,S3File>(request);
+    }
+
+    public object Get(QueryAzureFileItems request)
+    {
+        return QueryFiles<QueryAzureFileItems,AzureFileItem, AzureFile>(request);
+    }
+
+    public object Get(QueryFileSystemFileItems request)
+    {
+        return QueryFiles<QueryFileSystemFileItems, FileSystemFileItem, FileSystemFile>(request);
+    }
+
+    private QueryResponse<TItemTable> QueryFiles<TReq, TItemTable, TFileTable>(TReq request)
+        where TReq : QueryDb<TItemTable>, IQueryFileItem
+        where TItemTable : IFileItem
+        where TFileTable : IFile
+    {
+        var q = Db.From<TItemTable>().Join<TItemTable, TFileTable>((x, y) => x.Id == y.SharedFileId);
         var session = GetSession();
         var userAuthId = session.UserAuthId;
         var userAuth = AuthRepository.GetUserAuth(userAuthId);
@@ -58,8 +76,8 @@ public class MyServices : Service
             }
         }
 
-        return AutoQuery.Execute(request, q, Request);
+        var result = AutoQuery.Execute(request, q, Request);
+        return result;
     }
-
 }
 

@@ -9,9 +9,10 @@
 @inject JsonApiClient jsonApiClient;
 <SetHeader>
     <h1 class="text-2xl font-semibold text-gray-900">Aws View - @FileAccessType.ToString()</h1>
+    <SearchFiles OnSearch="performSearch"></SearchFiles>
 </SetHeader>
 
-<div>
+<div class="mt-4">
 
     @if (FileAccessType == ServiceModel.Types.FileAccessType.Team)
     {
@@ -43,8 +44,9 @@
     <BucketView Files="AppFiles"
                 BucketLandingPath="/aws"
                 FileAccessType="FileAccessType"
-                CreateRequest="() => new CreateS3FileItem { FileAccessType = FileAccessType, RoleName = roleSelection }"
-                OnUploadComplete="OnUploadComplete"/>
+                CreateRequest="createRequest"
+                OnUploadComplete="OnUploadComplete"
+                SearchTerm="@(searchTerm)"/>
 
 </div>
 
@@ -55,7 +57,9 @@
 
     private FileAccessType? FileAccessType;
 
-    private List<FileItemWithFile> AppFiles { get; set; } = new List<FileItemWithFile>();
+    private List<FileItemWithFile> AppFiles { get; set; } = new();
+
+    private string searchTerm;
 
     ResponseStatus? errorStatus;
 
@@ -65,16 +69,29 @@
 
     private string roleSelection = "";
 
+    async Task OnUploadComplete()
+    {
+        await refreshFiles();
+    }
+
+    CreateS3FileItem createRequest()
+    {
+        return new CreateS3FileItem { 
+            FileAccessType = FileAccessType, 
+            RoleName = FileAccessType == ServiceModel.Types.FileAccessType.Team ? roleSelection : null 
+        };
+    }
+
+    void performSearch(string searchTerm)
+    {
+        this.searchTerm = searchTerm;
+    }
+
     async Task populateRoles()
     {
         var authState = await AuthStateProvider.GetAuthenticationStateAsync();
         userRoles = authState.User.GetRoles().ToList();
         roleSelection = userRoles.IsEmpty() ? "" : userRoles[0];
-    }
-
-    async Task OnUploadComplete()
-    {
-        await refreshFiles();
     }
 
     protected override async Task OnInitializedAsync()
@@ -98,7 +115,8 @@
             {
                 FileAccessType = FileAccessType,
                 AppUserId = FileAccessType == ServiceModel.Types.FileAccessType.Private ?
-                    int.Parse(userId) : null
+                    int.Parse(userId) : null,
+                FileName = searchTerm.IsNullOrEmpty() ? null : searchTerm
             });
         }
         else
