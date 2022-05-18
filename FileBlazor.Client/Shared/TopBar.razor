@@ -1,5 +1,7 @@
 ﻿@using FileBlazor.ServiceModel.Types
 @inherits AppComponentBase
+@inject ServiceStackStateProvider AuthStateProvider;
+@inject NavigationManager NavigationManager;
 <div class="sticky top-0 z-10 flex-shrink-0 h-16 bg-white border-b border-gray-200 flex">
     <button type="button" class="border-r border-gray-200 px-4 text-gray-500 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500 md:hidden">
         <span class="sr-only">Open sidebar</span>
@@ -23,36 +25,61 @@
 
             <!-- Profile dropdown -->
             <div class="ml-3 relative">
-                <div>
-                    <button type="button" class="max-w-xs flex items-center text-sm rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" id="user-menu-button" aria-expanded="false" aria-haspopup="true">
-                        <span class="sr-only">Open user menu</span>
-                        <img class="h-8 w-8 rounded-full" src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80" alt="">
-                    </button>
-                </div>
 
-                <!--
-                Dropdown menu, show/hide based on menu state.
+                <AuthorizeView>
+                    <Authorized>
+                        <div>
+                            <button type="button" @onclick="ToggleNavMenu" class="max-w-xs flex items-center text-sm rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" id="user-menu-button" aria-expanded="false" aria-haspopup="true">
+                                <span class="sr-only">Open user menu</span>
+                                <img class="h-8 w-8 rounded-full" src="@context.User.GetProfileUrl()" alt="@context.User.GetDisplayName()">
+                            </button>
+                        </div>
+                        <!--
+                        Dropdown menu, show/hide based on menu state.
 
-                Entering: "transition ease-out duration-100"
-                From: "transform opacity-0 scale-95"
-                To: "transform opacity-100 scale-100"
-                Leaving: "transition ease-in duration-75"
-                From: "transform opacity-100 scale-100"
-                To: "transform opacity-0 scale-95"
-                -->
-                <div class="hidden origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 py-1 focus:outline-none" role="menu" aria-orientation="vertical" aria-labelledby="user-menu-button" tabindex="-1">
-                    <!-- Active: "bg-gray-100", Not Active: "" -->
-                    <a href="#" class="block py-2 px-4 text-sm text-gray-700" role="menuitem" tabindex="-1" id="user-menu-item-0">Your Profile</a>
+                        Entering: "transition ease-out duration-100"
+                        From: "transform opacity-0 scale-95"
+                        To: "transform opacity-100 scale-100"
+                        Leaving: "transition ease-in duration-75"
+                        From: "transform opacity-100 scale-100"
+                        To: "transform opacity-0 scale-95"
+                        -->
+                        <div class="@(collapseNavMenu == true ? "hidden" : "") origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 py-1 focus:outline-none" role="menu" aria-orientation="vertical" aria-labelledby="user-menu-button" tabindex="-1">
+                            <NavLink href="/" class="block py-2 px-4 text-sm text-gray-700" role="menuitem" tabindex="-1" id="user-menu-item-0"> Your Profile </NavLink>
 
-                    <a href="#" class="block py-2 px-4 text-sm text-gray-700" role="menuitem" tabindex="-1" id="user-menu-item-1">Settings</a>
+                            <a href="" @onclick="logout" class="block py-2 px-4 text-sm text-gray-700" role="menuitem" tabindex="-1" id="user-menu-item-2"> Sign out </a>
+                        </div>
+                    </Authorized>
+                    <Authorizing>
+                        <NavLink class="" href=@LoginUrl>Login</NavLink>
+                    </Authorizing>
+                    <NotAuthorized>
+                        <NavLink class="" href=@LoginUrl>Login</NavLink>
+                    </NotAuthorized>
+                </AuthorizeView>
 
-                    <a href="#" class="block py-2 px-4 text-sm text-gray-700" role="menuitem" tabindex="-1" id="user-menu-item-2">Sign out</a>
-                </div>
             </div>
         </div>
     </div>
 </div>
 
 @code {
+    bool collapseNavMenu = true;
+
+    void ToggleNavMenu() => collapseNavMenu = !collapseNavMenu;
+
+    string? LoginUrl { get; set; }
+
+    protected override Task OnParametersSetAsync()
+    {
+        LoginUrl = NavigationManager.GetLoginUrl();
+        return base.OnParametersSetAsync();
+    }
+
+    async Task logout()
+    {
+        await AuthStateProvider.LogoutAsync();
+        NavigationManager.NavigateTo(LoginUrl ?? "/", true);
+    }
 
 }

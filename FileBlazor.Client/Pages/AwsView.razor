@@ -14,36 +14,9 @@
 
 <div class="mt-4">
 
-    @if (FileAccessType == ServiceModel.Types.FileAccessType.Team)
-    {
-        <div>
-
-            <div>
-                <label class="text-base font-medium text-gray-900">Team Selection</label>
-                <p class="text-sm leading-5 text-gray-500">Upload file for which team?</p>
-                <fieldset class="mt-4">
-                    <legend class="sr-only">Role selection</legend>
-                    <div class="space-y-4 sm:flex sm:items-center sm:space-y-0 sm:space-x-10">
-                        @foreach (var role in userRoles)
-                        {
-                            <div class="flex items-center">
-                                <input id="@role" name="fileRole" value="@role" type="radio" checked="@(roleSelection == role)"
-                                       @onchange="() => roleSelection = role"
-                                       class="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300">
-                                <label for="@role" class="ml-3 block text-sm font-medium text-gray-700"> @role </label>
-                            </div>
-                        }
-
-                    </div>
-                </fieldset>
-            </div>
-        </div>
-    }
-
-
     <BucketView Files="AppFiles"
                 BucketLandingPath="/aws"
-                FileAccessType="FileAccessType"
+                FileAccessType="FileAccessType ?? ServiceModel.Types.FileAccessType.Public"
                 CreateRequest="createRequest"
                 OnUploadComplete="OnUploadComplete"
                 SearchTerm="@(searchTerm)"/>
@@ -65,20 +38,17 @@
 
     bool loading = false;
 
-    private List<string> userRoles = new();
-
-    private string roleSelection = "";
 
     async Task OnUploadComplete()
     {
         await refreshFiles();
     }
 
-    CreateS3FileItem createRequest()
+    CreateS3FileItem createRequest(string optionalRole)
     {
         return new CreateS3FileItem { 
             FileAccessType = FileAccessType, 
-            RoleName = FileAccessType == ServiceModel.Types.FileAccessType.Team ? roleSelection : null 
+            RoleName = FileAccessType == ServiceModel.Types.FileAccessType.Team ? optionalRole : null 
         };
     }
 
@@ -87,18 +57,11 @@
         this.searchTerm = searchTerm;
     }
 
-    async Task populateRoles()
-    {
-        var authState = await AuthStateProvider.GetAuthenticationStateAsync();
-        userRoles = authState.User.GetRoles().ToList();
-        roleSelection = userRoles.IsEmpty() ? "" : userRoles[0];
-    }
-
     protected override async Task OnInitializedAsync()
     {
         if (FileAccessType != null)
             await refreshFiles();
-        await populateRoles();
+        
         await base.OnInitializedAsync();
     }
 
@@ -113,7 +76,7 @@
         {
             apiFileItem = await ApiAsync(new QueryS3FileItems
             {
-                FileAccessType = FileAccessType,
+                FileAccessType = FileAccessType ?? ServiceModel.Types.FileAccessType.Public,
                 AppUserId = FileAccessType == ServiceModel.Types.FileAccessType.Private ?
                     int.Parse(userId) : null,
                 FileName = searchTerm.IsNullOrEmpty() ? null : searchTerm
