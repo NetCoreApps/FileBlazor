@@ -1,7 +1,9 @@
 using FileBlazor.ServiceModel;
 using FileBlazor.ServiceModel.Types;
 using ServiceStack;
+using ServiceStack.Azure.Storage;
 using ServiceStack.Data;
+using ServiceStack.IO;
 using ServiceStack.OrmLite;
 using System.Data;
 
@@ -17,32 +19,17 @@ namespace FileBlazor
                 SqliteDialect.Provider)))
             .ConfigureAppHost(appHost =>
             {
-                // Create non-existing Table and add Seed Data Example
-                using var db = appHost.Resolve<IDbConnectionFactory>().Open();                
-                if(db.CreateTableIfNotExists<FileSystemFile>())
+                // Create non-existing Table and add Seed Data Example                
+                appHost.ConfigurePlugin<FilesUploadFeature>(async feature =>
                 {
-
-                }
-                if(db.CreateTableIfNotExists<S3File>())
-                {
-
-                }
-                if(db.CreateTableIfNotExists<AzureFile>())
-                {
-
-                }
-                if (db.CreateTableIfNotExists<FileSystemFileItem>())
-                {
-                    
-                }
-                if (db.CreateTableIfNotExists<S3FileItem>())
-                {
-                    
-                }
-                if (db.CreateTableIfNotExists<AzureFileItem>())
-                {
-                    
-                }
+                    using var db = appHost.Resolve<IDbConnectionFactory>().Open();
+                    var s3Vfs = (S3VirtualFiles)feature.GetLocation("s3").VirtualFiles;
+                    var azureVfs = (AzureBlobVirtualFiles)feature.GetLocation("azure").VirtualFiles;
+                    var fsVfs = (FileSystemVirtualFiles)feature.GetLocation("fs").VirtualFiles;
+                    var sampleFilePath = appHost.ContentRootDirectory.RealPath.CombineWith("samplefiles").AssertDir();
+                    await db.SeedFileBlazor(s3Vfs, azureVfs, fsVfs, sampleFilePath);
+                });
+                
             });
     }
 
