@@ -1,10 +1,144 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
     <PropertyGroup>
         <TargetFramework>net6.0</TargetFramework>
         <Nullable>enable</Nullable>
         <ImplicitUsings>enable</ImplicitUsings>
     </PropertyGroup>
+
+    <ItemGroup>
+      <None Remove="samplefiles\animated.gif" />
+      <None Remove="samplefiles\image.svg" />
+      <None Remove="samplefiles\progressive.jpg" />
+      <None Remove="samplefiles\sample.aac" />
+      <None Remove="samplefiles\sample.ac3" />
+      <None Remove="samplefiles\sample.ai" />
+      <None Remove="samplefiles\sample.aiff" />
+      <None Remove="samplefiles\sample.amr" />
+      <None Remove="samplefiles\sample.au" />
+      <None Remove="samplefiles\sample.avi" />
+      <None Remove="samplefiles\sample.dat" />
+      <None Remove="samplefiles\sample.flac" />
+      <None Remove="samplefiles\sample.flv" />
+      <None Remove="samplefiles\sample.gif" />
+      <None Remove="samplefiles\sample.jpg" />
+      <None Remove="samplefiles\sample.mid" />
+      <None Remove="samplefiles\sample.mka" />
+      <None Remove="samplefiles\sample.mov" />
+      <None Remove="samplefiles\sample.mp3" />
+      <None Remove="samplefiles\sample.mp4" />
+      <None Remove="samplefiles\sample.ogg" />
+      <None Remove="samplefiles\sample.png" />
+      <None Remove="samplefiles\sample.ra" />
+      <None Remove="samplefiles\sample.tiff" />
+      <None Remove="samplefiles\sample.txt" />
+      <None Remove="samplefiles\sample.voc" />
+      <None Remove="samplefiles\sample.wav" />
+      <None Remove="samplefiles\sample.webm" />
+      <None Remove="samplefiles\sample.webp" />
+      <None Remove="samplefiles\sample.wma" />
+      <None Remove="samplefiles\sample.xml" />
+      <None Remove="samplefiles\sample.xsd" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Content Include="samplefiles\animated.gif">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
+      <Content Include="samplefiles\image.svg">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
+      <Content Include="samplefiles\progressive.jpg">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
+      <Content Include="samplefiles\sample.aac">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
+      <Content Include="samplefiles\sample.ac3">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
+      <Content Include="samplefiles\sample.ai">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
+      <Content Include="samplefiles\sample.aiff">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
+      <Content Include="samplefiles\sample.amr">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
+      <Content Include="samplefiles\sample.au">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
+      <Content Include="samplefiles\sample.avi">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
+      <Content Include="samplefiles\sample.dat">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
+      <Content Include="samplefiles\sample.flac">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
+      <Content Include="samplefiles\sample.flv">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
+      <Content Include="samplefiles\sample.gif">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
+      <Content Include="samplefiles\sample.jpg">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
+      <Content Include="samplefiles\sample.mid">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
+      <Content Include="samplefiles\sample.mka">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
+      <Content Include="samplefiles\sample.mov">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
+      <Content Include="samplefiles\sample.mp3">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
+      <Content Include="samplefiles\sample.mp4">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
+      <Content Include="samplefiles\sample.ogg">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
+      <Content Include="samplefiles\sample.png">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
+      <Content Include="samplefiles\sample.ra">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
+      <Content Include="samplefiles\sample.tiff">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
+      <Content Include="samplefiles\sample.txt">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
+      <Content Include="samplefiles\sample.voc">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
+      <Content Include="samplefiles\sample.wav">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
+      <Content Include="samplefiles\sample.webm">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
+      <Content Include="samplefiles\sample.webp">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
+      <Content Include="samplefiles\sample.wma">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
+      <Content Include="samplefiles\sample.xml">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
+      <Content Include="samplefiles\sample.xsd">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
+    </ItemGroup>
     <ItemGroup>
         <Using Include="FileBlazor" />
         <Using Include="ServiceStack" />
@@ -25,26 +159,9 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Content Remove="wwwroot\profiles\takashi-miyazaki-93-nUbomATA-unsplash.jpg" />
-      <Content Remove="wwwroot\profiles\roman-holoschchuk-O-98kcPe0P8-unsplash.jpg" />
-      <Content Remove="wwwroot\profiles\reza-biazar-eSjmZW97cH8-unsplash.jpg" />
-      <Content Remove="wwwroot\profiles\peter-john-manlapig-KRBHTbLTMDs-unsplash.jpg" />
-      <Content Remove="wwwroot\profiles\omid-armin-VS4Bg3tWWcI-unsplash.jpg" />
-      <Content Remove="wwwroot\profiles\mateus-campos-felipe-JoM_lC1WAnE-unsplash.jpg" />
-      <Content Remove="wwwroot\profiles\luke-braswell-oYFv-_JKsVk-unsplash.jpg" />
-      <Content Remove="wwwroot\profiles\joseph-gonzalez-iFgRcqHznqg-unsplash.jpg" />
-      <Content Remove="wwwroot\profiles\joel-mott-LaK153ghdig-unsplash.jpg" />
-      <Content Remove="wwwroot\profiles\janko-ferlic-mIs_QHS1ht8-unsplash.jpg" />
-      <Content Remove="wwwroot\profiles\hisu-lee-u6LGX2VMOP4-unsplash.jpg" />
-      <Content Remove="wwwroot\profiles\engin-akyurt-ljkKZUU6AkQ-unsplash.jpg" />
-      <Content Remove="wwwroot\profiles\engin-akyurt-UJavPBeDsT8-unsplash.jpg" />
-      <Content Remove="wwwroot\profiles\de-andre-bush-baeDx6LuSt4-unsplash.jpg" />
-      <Content Remove="wwwroot\profiles\christopher-campbell-rDEOVtE7vOs-unsplash.jpg" />
-      <Content Remove="wwwroot\profiles\charles-etoroma-95UF6LXe-Lo-unsplash.jpg" />
-      <Content Remove="wwwroot\profiles\askar-ulzhabayev-mOnHNBhyjgM-unsplash.jpg" />
-      <Content Remove="wwwroot\profiles\art-hauntington-jzY0KRJopEI-unsplash.jpg" />
-      <Content Remove="wwwroot\profiles\angelina-litvin-52R7t7x8CPI-unsplash.jpg" />
-      <Content Remove="wwwroot\profiles\7.jpg" />
+      <Content Update="samplefiles\sample.json">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
     </ItemGroup>
     
     <PropertyGroup>
