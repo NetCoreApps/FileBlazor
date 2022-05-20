@@ -1,30 +1,41 @@
 ﻿@using FileBlazor.ServiceModel.Types
 <h3 class="leading-6 font-medium text-gray-900 @(SearchTerm.IsNullOrEmpty() ? "hidden" : "")">Search results</h3>
 <div class="max-w-7xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
-    
+
     <ul role="list" class="grid grid-cols-2 gap-x-4 gap-y-8 sm:grid-cols-3 sm:gap-x-6 lg:grid-cols-4 xl:gap-x-8">
         @foreach (var appFile in filteredFiles)
         {
             <li class="relative">
                 <div class="group block w-full aspect-w-10 aspect-h-7 rounded-lg bg-gray-100 focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-offset-gray-100 focus-within:ring-indigo-500 overflow-hidden">
-                    @if (MimeTypes.GetMimeType(appFile.File.FileName.GetExtension()).StartsWith("image"))
+                    @if (appFile.File.ContentType.StartsWith("image") && !skipImageContentTypes.Contains(appFile.File.ContentType))
                     {
                         <img src="@appFile.File.FilePath" alt="" class="object-cover pointer-events-none group-hover:opacity-75"/>
+                        <a target="_blank" href="@appFile.File.FilePath" class="absolute inset-0 focus:outline-none">
+                            <span class="sr-only">Download @appFile.File.FilePath.LastRightPart("/")</span>
+                        </a>
+                    }
+                    else if (appFile.File.ContentType.StartsWith("video") && supportedContentTypes.Contains(appFile.File.ContentType))
+                    {
+                        <video controls="controls" src="@appFile.File.FilePath" alt="" class="object-cover group-hover:opacity-75"/>
+                    }
+                    else if (appFile.File.ContentType.StartsWith("audio") && supportedContentTypes.Contains(appFile.File.ContentType))
+                    {
+                        <audio controls="controls" src="@appFile.File.FilePath" alt="" class="object-cover group-hover:opacity-75"/>
                     }
                     else
                     {
                         <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img" width="8em" height="8em" preserveAspectRatio="xMidYMid meet" viewBox="0 0 1024 1024">
                             <path fill="currentColor" d="M854.6 288.6L639.4 73.4c-6-6-14.1-9.4-22.6-9.4H192c-17.7 0-32 14.3-32 32v832c0 17.7 14.3 32 32 32h640c17.7 0 32-14.3 32-32V311.3c0-8.5-3.4-16.7-9.4-22.7zM790.2 326H602V137.8L790.2 326zm1.8 562H232V136h302v216a42 42 0 0 0 42 42h216v494zM504 618H320c-4.4 0-8 3.6-8 8v48c0 4.4 3.6 8 8 8h184c4.4 0 8-3.6 8-8v-48c0-4.4-3.6-8-8-8zM312 490v48c0 4.4 3.6 8 8 8h384c4.4 0 8-3.6 8-8v-48c0-4.4-3.6-8-8-8H320c-4.4 0-8 3.6-8 8z"/>
                         </svg>
+                        <a target="_blank" href="@appFile.File.FilePath" class="absolute inset-0 focus:outline-none">
+                            <span class="sr-only">Download @appFile.File.FilePath.LastRightPart("/")</span>
+                        </a>
                     }
-
-                    <a target="_blank" href="@appFile.File.FilePath" class="absolute inset-0 focus:outline-none">
-                        <span class="sr-only">Download @appFile.File.FilePath.LastRightPart("/")</span>
-                    </a>
                 </div>
                 <div class="w-full flex">
                     <div class="flex-1 flex-grow truncate">
                         <p class="mt-2 block text-sm font-medium text-gray-900 truncate">@appFile.File.FilePath.LastRightPart("/")</p>
+                        <p class="block text-sm font-medium text-gray-500 pointer-events-none">@appFile.File.ContentType</p>
                         <p class="block text-sm font-medium text-gray-500 pointer-events-none">@(Math.Round(((double)appFile.File.ContentLength / (1024 * 1024)), 2)) MB</p>
                         <p class="block text-sm font-medium text-gray-500 pointer-events-none">@appFile.FileItem.RoleName</p>
                     </div>
@@ -46,6 +57,21 @@
     [Parameter]
     public string SearchTerm { get; set; } = "";
 
+    private List<string> supportedContentTypes = new()
+    {
+        "audio/acc",
+        "audio/mpeg3",
+        "audio/wav",
+        "video/webm",
+        "video/ogg",
+        "video/mp4",
+    };
+
+    private List<string> skipImageContentTypes = new()
+    {
+        "image/tiff"
+    };
+
     protected override async Task OnParametersSetAsync()
     {
         await base.OnParametersSetAsync();
@@ -58,8 +84,8 @@
     {
         var result = new List<FileItemWithFile>();
         if (!SearchTerm.IsNullOrEmpty())
-            result = AppFiles.Where(x => x.File.FileName.Contains(SearchTerm, StringComparison.InvariantCultureIgnoreCase) || 
-            (x.FileItem.RoleName != null && x.FileItem.RoleName.Contains(SearchTerm))).ToList();
+            result = AppFiles.Where(x => x.File.FileName.Contains(SearchTerm, StringComparison.InvariantCultureIgnoreCase) ||
+                                         (x.FileItem.RoleName != null && x.FileItem.RoleName.Contains(SearchTerm))).ToList();
         else
             result = AppFiles;
         filteredFiles.Clear();
