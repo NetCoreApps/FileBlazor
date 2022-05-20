@@ -1,6 +1,78 @@
 ﻿@page "/aws"
-<h3>Aws</h3>
+<div class="relative bg-white overflow-hidden">
+    <div class="hidden lg:block lg:absolute lg:inset-y-0 lg:h-full lg:w-full">
+        <div class="relative h-full text-lg max-w-prose mx-auto" aria-hidden="true">
+            <svg class="absolute top-12 left-full transform translate-x-32" width="404" height="384" fill="none" viewBox="0 0 404 384">
+                <defs>
+                    <pattern id="74b3fd99-0a6f-4271-bef2-e80eeafdf357" x="0" y="0" width="20" height="20" patternUnits="userSpaceOnUse">
+                        <rect x="0" y="0" width="4" height="4" class="text-gray-200" fill="currentColor"/>
+                    </pattern>
+                </defs>
+                <rect width="404" height="384" fill="url(#74b3fd99-0a6f-4271-bef2-e80eeafdf357)"/>
+            </svg>
+            <svg class="absolute top-1/2 right-full transform -translate-y-1/2 -translate-x-32" width="404" height="384" fill="none" viewBox="0 0 404 384">
+                <defs>
+                    <pattern id="f210dbf6-a58d-4871-961e-36d5016a0f49" x="0" y="0" width="20" height="20" patternUnits="userSpaceOnUse">
+                        <rect x="0" y="0" width="4" height="4" class="text-gray-200" fill="currentColor"/>
+                    </pattern>
+                </defs>
+                <rect width="404" height="384" fill="url(#f210dbf6-a58d-4871-961e-36d5016a0f49)"/>
+            </svg>
+            <svg class="absolute bottom-12 left-full transform translate-x-32" width="404" height="384" fill="none" viewBox="0 0 404 384">
+                <defs>
+                    <pattern id="d3eb07ae-5182-43e6-857d-35c643af9034" x="0" y="0" width="20" height="20" patternUnits="userSpaceOnUse">
+                        <rect x="0" y="0" width="4" height="4" class="text-gray-200" fill="currentColor"/>
+                    </pattern>
+                </defs>
+                <rect width="404" height="384" fill="url(#d3eb07ae-5182-43e6-857d-35c643af9034)"/>
+            </svg>
+        </div>
+    </div>
+    <div class="relative px-4 sm:px-6 lg:px-8">
+        <div class="text-lg max-w-prose mx-auto">
+            <h1>
+                <span class="block text-base text-center text-indigo-600 font-semibold tracking-wide uppercase">Configuring</span>
+                <span class="mt-2 block text-3xl text-center leading-8 font-extrabold tracking-tight text-gray-900 sm:text-4xl">AWS S3 FileUploadFeature</span>
+            </h1>
+            <p class="mt-8 text-xl text-gray-500 leading-8">The FileUploadFeature plugin supports having multiple <strong>UploadLocations</strong> configured at once, and each <strong>UploadLocation</strong> can use a different implementation of the <strong>IVirtualFiles</strong> interface.</p>
+        </div>
+        <div class="mt-6 prose prose-indigo prose-lg text-gray-500 mx-auto">
+            <p>This can be added in your AppHost Configure method or IHostingStartup ConfigureAppHost method. Each UploadLocation requires a Name string and an instance of an IVirtualFiles provider.</p>
+            <figure class="m-2">
+                <img class="w-full rounded-lg" src="/img/fileupload-config-plugin.png" alt="" width="1310" height="873">
+                <figcaption>Configuration FileUploadPlugin with AWS S3.</figcaption>
+            </figure>
+            <p>In this example of integrating AWS S3, we initialize the AWS SDK <strong>AmazonS3Client</strong>, pass it to our IVirtualFiles implementation, in this case <strong>S3VirtualFiles</strong> and specify a <strong>bucket name</strong>.</p>
+            <h2>Using File Upload Locations in APIs</h2>
+            <p>With just the above configured, we can now use them in our APIs. The <strong>[UploadTo("name")]</strong> attribute is used with an AutoQuery request DTO and related database model class. For example, the <strong>S3FileItem</strong> table contains metadata about file access and is referenced by <strong>S3File</strong> table which contains our file metadata.</p>
+
+            <p>In this demo, we store the file metadata in one table which is related back to another to store additional metadata we use to limit file access.</p>
+            <figure class="m-2">
+                <img class="w-full rounded-lg" src="/img/fileupload-s3-datamodel.png" alt="" width="1310" height="873">
+                <figcaption>Define your database tables to store file metadata.</figcaption>
+            </figure>
+
+            <p>The <strong>S3File</strong> data is populated automatically when a file is uploaded while creating an <strong>S3FileItem</strong>. We apply to <strong>[UploadTo("s3")]</strong> attribute to the <i>create</i> DTO to the matching type and name for the <strong>S3File</strong>. The "s3" name matches the <strong>UploadLocation</strong> we previously configured in the <strong>FilesUploadFeature</strong>. This is what determines where the upload file is stored.</p>
+            <figure class="m-2">
+                <img class="w-full rounded-lg" src="/img/fileupload-create-s3-dto.png" alt="" width="1310" height="873">
+                <figcaption>Your AutoQuery Create/Update DTOs uses the UploadTo attribute</figcaption>
+            </figure>
+            <p>We also apply the <strong>[Input(Type="file")]</strong> attribute to enhance the Locode App so we can upload files directly from the Locode generated user interface.</p>
+            <figure class="m-2">
+                <img class="w-full rounded-lg" src="/img/locode-app-create-s3.png" alt="" width="1310" height="873">
+                <figcaption>Locode App generates working UI for upload</figcaption>
+            </figure>
+            <h2>Blazor Custom Client Upload</h2>
+            <p>If you need to provide a custom UI, these services accessible from multiple languages since they are HTTP services.</p>
+            <p>For example, this demo provides the ability to drag &amp; drop files to upload. It does this using the ServiceStack <strong>JsonApiClient</strong> to <strong>MultipartFormDataContent</strong> which includes the request and the file to upload.</p>
+            <figure class="m-2">
+                <img class="w-full rounded-lg" src="/img/blazor-upload-s3-file.png" alt="" width="1310" height="873">
+                <figcaption>Blazor S3 file upload example</figcaption>
+            </figure>
+        </div>
+    </div>
+</div>
 
 @code {
-    
+
 }

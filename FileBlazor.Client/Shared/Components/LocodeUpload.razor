@@ -105,11 +105,11 @@
         }
     }
 
+    long maxFileSize = 1024 * 1024 * 15;
+
     async Task UploadFile(InputFileChangeEventArgs e)
     {
         await OnUploadStarted.InvokeAsync();
-        long maxFileSize = 1024 * 1024 * 15;
-
 
         using var content = new MultipartFormDataContent()
             .AddParams(Request);
@@ -127,7 +127,9 @@
         ms.Position = 0;
         content.AddFile(FilePropertyName, file.Name, ms, file.ContentType);
 
-        var api = await jsonApiClient.ApiFormAsync<TReq>(Request.GetType().ToApiUrl(), content);
+        var api = await jsonApiClient.ApiFormAsync<TReq>(
+            Request.GetType().ToApiUrl(), content
+            );
         if (!api.Succeeded)
             errorStatus = api.Error;
 

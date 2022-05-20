@@ -12,8 +12,8 @@ namespace FileBlazor.ServiceModel.Types
 {
     public class S3File : IFile
     {
-        [AutoIncrement] public int Id { get; set; }
-        
+        [AutoIncrement] 
+        public int Id { get; set; }
         public string FileName { get; set; }
 
         [Format(FormatMethods.Attachment)] 
