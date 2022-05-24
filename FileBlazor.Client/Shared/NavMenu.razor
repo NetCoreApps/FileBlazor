@@ -54,7 +54,7 @@
 
                 <NavLink href="/aws" ActiveClass="bg-gray-100 text-gray-900" Match="NavLinkMatch.All" class="text-gray-600 hover:bg-gray-50 hover:text-gray-900 group rounded-md py-2 px-2 flex items-center text-base font-medium">
                     <!-- Heroicon name: outline/users -->
-                    <img alt="AWS Logo" src="/img/aws-s3.svg" class="mr-3 flex-shrink-0 h-10 w-24 text-gray-400 group-hover:text-gray-500" />
+                    <img alt="AWS Logo" src="/img/aws.svg" class="mr-3 flex-shrink-0 h-10 w-24 text-gray-400 group-hover:text-gray-500" />
                         <div class="w-full">
                             <NavLink href="/aws/public" ActiveClass="bg-gray-100 text-gray-900" class="group w-full flex items-center pl-11 pr-2 py-2 text-sm font-medium text-gray-600 rounded-md hover:text-gray-900 hover:bg-gray-50"> Public </NavLink>
                               
@@ -115,10 +115,10 @@
                 <div>
                     <!-- Current: "bg-gray-100 text-gray-900", Default: "bg-white text-gray-600 hover:bg-gray-50 hover:text-gray-900" -->
                     <NavLink href="/aws" ActiveClass="bg-gray-100 text-gray-900 group w-full flex items-center pl-2 pr-1 py-2 text-left text-sm font-medium rounded-md" Match="NavLinkMatch.All" class="text-gray-600 hover:bg-gray-50 hover:text-gray-900 group w-full flex items-center pl-2 pr-1 py-2 text-left text-sm font-medium rounded-md" aria-controls="sub-menu-1" aria-expanded="false">
-                        <!-- Heroicon name: outline/users -->
-                        
-                        <img alt="AWS Logo" src="/img/aws-s3.svg" class="mr-3 flex-shrink-0 h-10 w-24 text-gray-400 group-hover:text-gray-500" />
-                        <span class="flex-1">  </span>
+                        <img alt="AWS Logo" src="/img/aws.svg" class="w-10 h-10" />
+                        <span class="text-gray-900 flex-1 px-2 text-2xl tracking-tight font-bold">
+                            S3
+                        </span>
                     </NavLink>
                     <!-- Expandable link section, show/hide based on state. -->
                     <div id="sub-menu-1">
@@ -133,9 +133,10 @@
                 <div>
                     <!-- Current: "bg-gray-100 text-gray-900", Default: "bg-white text-gray-600 hover:bg-gray-50 hover:text-gray-900" -->
                     <NavLink href="/azure" ActiveClass="bg-gray-100 text-gray-900" Match="NavLinkMatch.All" class="text-gray-600 hover:bg-gray-50 hover:text-gray-900 group w-full flex items-center pl-2 pr-1 py-2 text-left text-sm font-medium rounded-md" aria-controls="sub-menu-2" aria-expanded="false">
-                        <!-- Heroicon name: outline/folder -->
-                        <img src="/img/azure.svg" class="mr-3 flex-shrink-0 h-10 w-24 text-gray-400 group-hover:text-gray-500" />
-                        <span class="flex-1"> </span>
+                        <img src="/img/azure.svg" class="w-10 h-10" />
+                        <span class="text-gray-900 flex-1 px-2 text-lg tracking-tight font-bold">
+                            Azure Blob
+                        </span>
                     </NavLink>
                     <!-- Expandable link section, show/hide based on state. -->
                     <div id="sub-menu-2">
@@ -150,8 +151,10 @@
                 <div>
                     <!-- Current: "bg-gray-100 text-gray-900", Default: "bg-white text-gray-600 hover:bg-gray-50 hover:text-gray-900" -->
                     <NavLink href="/filesystem" ActiveClass="bg-gray-100 text-gray-900 group w-full flex items-center pl-2 pr-1 py-2 text-left text-sm font-medium rounded-md" Match="NavLinkMatch.All" class="text-gray-600 hover:bg-gray-50 hover:text-gray-900 group w-full flex items-center pl-2 pr-1 py-2 text-left text-sm font-medium rounded-md" aria-controls="sub-menu-3" aria-expanded="false">
-                        <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img" width="2em" height="2em" preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24"><path fill="currentColor" d="M21 8h-2.59l-1-1H15a2.006 2.006 0 0 0-2 2v4a2.006 2.006 0 0 0 2 2h6a2.006 2.006 0 0 0 2-2v-3a2.006 2.006 0 0 0-2-2Zm0 5h-6V9h2l1 1h3Zm0 4h-2.59l-1-1H15a2.006 2.006 0 0 0-2 2v4a2.006 2.006 0 0 0 2 2h6a2.006 2.006 0 0 0 2-2v-3a2.006 2.006 0 0 0-2-2Zm0 5h-6v-4h2l1 1h3ZM8 19v-7h5v-2H8V8H6v13h7v-2H8zm2-18H7.41l-1-1H4a2.006 2.006 0 0 0-2 2v4a2.006 2.006 0 0 0 2 2h6a2.006 2.006 0 0 0 2-2V3a2.006 2.006 0 0 0-2-2Zm0 5H4V2h2l1 1h3Z"/></svg>
-                        <span class="flex-1 px-2 text-lg">   FileSystem </span>
+                        <img alt="FileSystem Logo" src="/img/files.svg" class="w-10 h-10" />
+                        <span class="text-gray-900 flex-1 px-2 text-lg tracking-tight font-bold">
+                            File System
+                        </span>
                     </NavLink>
                     <div id="sub-menu-3">
                         <NavLink href="/filesystem/public" ActiveClass="bg-gray-100 text-gray-900" class="group w-full flex items-center pl-11 pr-2 py-2 text-sm font-medium text-gray-600 rounded-md hover:text-gray-900 hover:bg-gray-50"> Public </NavLink>
