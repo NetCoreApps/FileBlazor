@@ -155,4 +155,8 @@ select {
         outline: 1px auto -webkit-focus-ring-color;
     }
 
+.prose a.no-underline {
+    text-decoration: none
+}
+
 @tailwind utilities;
