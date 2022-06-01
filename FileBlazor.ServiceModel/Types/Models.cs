@@ -47,7 +47,8 @@ namespace FileBlazor.ServiceModel.Types
 
     public class AzureFile : IFile
     {
-        [AutoIncrement] public int Id { get; set; }
+        [AutoIncrement] 
+        public int Id { get; set; }
 
         public string FileName { get; set; }
 
@@ -113,6 +114,7 @@ namespace FileBlazor.ServiceModel.Types
 
         [Reference] 
         public AzureFile AppFile { get; set; }
+        
         [References(typeof(AppUser))]
         public int AppUserId { get; set; }
 
