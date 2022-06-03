@@ -49,7 +49,7 @@ public class AppHost : AppHostBase, IHostingStartup
         var appFs = new FileSystemVirtualFiles(ContentRootDirectory.RealPath.CombineWith("App_Data").AssertDir());
         var s3Client = new AmazonS3Client(awsAccessKeyId, awsSecretAccessKey, RegionEndpoint.USEast1);
         var s3DataVfs = new S3VirtualFiles(s3Client, "file-blazor-demo");
-        var azureBlobVfs = new AzureBlobVirtualFiles(azureBlobConnString, "file-blazor-demo");
+        var azureBlobVfs = new AzureBlobVirtualFiles(azureBlobConnString, "fileblazordemo");
 
         Plugins.Add(new FilesUploadFeature(
             new UploadLocation("azure", azureBlobVfs,
