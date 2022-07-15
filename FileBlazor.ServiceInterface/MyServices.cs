@@ -8,6 +8,7 @@ using ServiceStack.Auth;
 using ServiceStack.Configuration;
 using ServiceStack.OrmLite;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace FileBlazor.ServiceInterface;
 
@@ -84,28 +85,28 @@ public class MyServices : Service
         return result;
     }
 
-    public void Delete(DeleteFileSystemFileItem request)
+    public async Task Delete(DeleteFileSystemFileItem request)
     {
         var fileItem = Db.LoadSingleById<FileSystemFileItem>(request.Id);
         var fileId = fileItem.AppFile.Id;
-        DeleteFile<FileSystemFileItem,FileSystemFile>(fileId, fileItem.Id);
+        await DeleteFile<FileSystemFileItem,FileSystemFile>(fileId, fileItem.Id);
     }
 
-    public void Delete(DeleteS3FileItem request)
+    public async Task Delete(DeleteS3FileItem request)
     {
         var fileItem = Db.LoadSingleById<S3FileItem>(request.Id);
         var fileId = fileItem.AppFile.Id;
-        DeleteFile<S3FileItem, S3File>(fileId, fileItem.Id);
+        await DeleteFile<S3FileItem, S3File>(fileId, fileItem.Id);
     }
 
-    public void Delete(DeleteAzureFileItem request)
+    public async Task Delete(DeleteAzureFileItem request)
     {
         var fileItem = Db.LoadSingleById<AzureFileItem>(request.Id);
         var fileId = fileItem.AppFile.Id;
-        DeleteFile<AzureFileItem, AzureFile>(fileId, fileItem.Id);
+        await DeleteFile<AzureFileItem, AzureFile>(fileId, fileItem.Id);
     }
 
-    private void DeleteFile<TItemTable, TFileTable>(long fileId, long fileItemId)
+    private async Task DeleteFile<TItemTable, TFileTable>(long fileId, long fileItemId)
         where TItemTable : IFileItem
         where TFileTable : IFile
     {
@@ -113,15 +114,23 @@ public class MyServices : Service
         var file = Db.SingleById<TFileTable>(fileId);
         var fileItem = Db.SingleById<TItemTable>(fileItemId);
         using var deleteService = this.ResolveService<DeleteFileUploadService>();
-        deleteService.Delete(new DeleteFileUpload
+        var locationName = deleteUploadLocationMapping[typeof(TFileTable)];
+        await deleteService.Delete(new DeleteFileUpload
         {
-            Name = file.FileName,
-            Path = file.FilePath
+            Name = locationName,
+            Path = file.FilePath.Substring($"uploads/{locationName}/".Length)
         });
         Db.Delete(file);
         Db.Delete(fileItem);
         transaction.Commit();
     }
+
+    private Dictionary<Type, string> deleteUploadLocationMapping = new()
+    {
+        { typeof(S3File), "s3" },
+        { typeof(AzureFile), "azure" },
+        { typeof(FileSystemFile), "fs" }
+    };
 }
 
 
