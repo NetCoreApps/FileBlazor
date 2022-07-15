@@ -7,6 +7,7 @@ using ServiceStack.Web;
 using ServiceStack.Auth;
 using ServiceStack.Configuration;
 using ServiceStack.OrmLite;
+using System.Collections.Generic;
 
 namespace FileBlazor.ServiceInterface;
 
@@ -45,14 +46,17 @@ public class MyServices : Service
         where TItemTable : IFileItem
         where TFileTable : IFile
     {
-        var q = Db.From<TItemTable>().Join<TItemTable, TFileTable>((x, y) => x.Id == y.SharedFileId);
+        var q = AutoQuery.CreateQuery(request, base.Request, Db);
         var session = GetSession();
         var userAuthId = session.UserAuthId;
         var userAuth = AuthRepository.GetUserAuth(userAuthId);
         var userRoles = AuthRepository.GetRoles(userAuth);
 
         if (session.HasRole(RoleNames.Admin, AuthRepository))
-            q.Where(x => x.FileAccessType == request.FileAccessType);
+        {
+            if (request.FileAccessType != null)
+                q.Where(x => x.FileAccessType == request.FileAccessType);
+        }
         else
         {
             switch (request.FileAccessType)
@@ -79,5 +83,45 @@ public class MyServices : Service
         var result = AutoQuery.Execute(request, q, Request);
         return result;
     }
+
+    public void Delete(DeleteFileSystemFileItem request)
+    {
+        var fileItem = Db.LoadSingleById<FileSystemFileItem>(request.Id);
+        var fileId = fileItem.AppFile.Id;
+        DeleteFile<FileSystemFileItem,FileSystemFile>(fileId, fileItem.Id);
+    }
+
+    public void Delete(DeleteS3FileItem request)
+    {
+        var fileItem = Db.LoadSingleById<S3FileItem>(request.Id);
+        var fileId = fileItem.AppFile.Id;
+        DeleteFile<S3FileItem, S3File>(fileId, fileItem.Id);
+    }
+
+    public void Delete(DeleteAzureFileItem request)
+    {
+        var fileItem = Db.LoadSingleById<AzureFileItem>(request.Id);
+        var fileId = fileItem.AppFile.Id;
+        DeleteFile<AzureFileItem, AzureFile>(fileId, fileItem.Id);
+    }
+
+    private void DeleteFile<TItemTable, TFileTable>(long fileId, long fileItemId)
+        where TItemTable : IFileItem
+        where TFileTable : IFile
+    {
+        using var transaction = Db.OpenTransaction();
+        var file = Db.SingleById<TFileTable>(fileId);
+        var fileItem = Db.SingleById<TItemTable>(fileItemId);
+        using var deleteService = this.ResolveService<DeleteFileUploadService>();
+        deleteService.Delete(new DeleteFileUpload
+        {
+            Name = file.FileName,
+            Path = file.FilePath
+        });
+        Db.Delete(file);
+        Db.Delete(fileItem);
+        transaction.Commit();
+    }
 }
+
 

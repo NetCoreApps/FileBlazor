@@ -116,3 +116,18 @@ public class UpdateAzureFileItem : IUpdateDb<AzureFileItem>, IReturn<AzureFileIt
     [Input(Type = "file"), UploadTo("azure")]
     public AzureFile AppFile { get; set; }
 }
+
+public class DeleteFileSystemFileItem : IDeleteDb<FileSystemFileItem>, IReturnVoid
+{
+    public int Id { get; set; }
+}
+
+public class DeleteS3FileItem : IDeleteDb<S3FileItem>, IReturnVoid
+{
+    public int Id { get; set; }
+}
+
+public class DeleteAzureFileItem : IDeleteDb<AzureFileItem>, IReturnVoid
+{
+    public int Id { get; set; }
+}
