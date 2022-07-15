@@ -117,16 +117,19 @@ public class UpdateAzureFileItem : IUpdateDb<AzureFileItem>, IReturn<AzureFileIt
     public AzureFile AppFile { get; set; }
 }
 
+[ValidateIsAuthenticated]
 public class DeleteFileSystemFileItem : IDeleteDb<FileSystemFileItem>, IReturnVoid
 {
     public int Id { get; set; }
 }
 
+[ValidateIsAuthenticated]
 public class DeleteS3FileItem : IDeleteDb<S3FileItem>, IReturnVoid
 {
     public int Id { get; set; }
 }
 
+[ValidateIsAuthenticated]
 public class DeleteAzureFileItem : IDeleteDb<AzureFileItem>, IReturnVoid
 {
     public int Id { get; set; }
