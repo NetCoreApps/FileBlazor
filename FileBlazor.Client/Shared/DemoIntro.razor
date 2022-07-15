@@ -64,7 +64,7 @@
             </figure>
             <p>The FileUploadFeature plugin uses the ServiceStack IVirtualFiles abstraction where multiple named providers can be used and referenced against your database model. Your own database stores metadata about each file including a reference to HTTP file path where the file where it can be downloaded.</p>
             <h2>Driven by your request DTOs</h2>
-            <p>Your table data for the files in this demo are then shared using <strong>AutoQuery</strong> services. AutoQuery provides the overriable service implementation to manage this data, this is where you can link your FileUploadFeature to specific table data using the `UploadTo` attribute.</p>
+            <p>Your table data for the files in this demo are then shared using <strong>AutoQuery</strong> services. AutoQuery provides the overridable service implementation to manage this data, this is where you can link your FileUploadFeature to specific table data using the `UploadTo` attribute.</p>
             <figure class="m-2">
                 <img class="w-full rounded-lg" src="/img/fileupload-create-dto.png" alt="" width="1310" height="873">
                 <figcaption>Define your request Data Transfer Objects (DTOs) and use `UploadTo` with the related named UploadLocation.</figcaption>
@@ -79,7 +79,7 @@
             <h2>Overridable filters in the plugin</h2>
             <p>
                 The UploadFeaturePlugin provides overridable options to better control upload/download rules. In this demo, `Public`, `Team` and `Private` files are stored in single table for each upload location.
-                Access rules are confgiured for each of the upload locations independantly using the following plugin options.
+                Access rules are configured for each of the upload locations independently using the following plugin options.
             </p>
 
             <ul role="list">
@@ -90,7 +90,7 @@
             </ul>
 
             <h2>Integrate API services with a custom UI</h2>
-            <p>Since AutoQuery services are ServiceStack services, they benefit from being highly interroperable. This FileBlazor demo uses native Blazor components to upload to the generated API services providing a user friendly drag and drop interface.</p>
+            <p>Since AutoQuery services are ServiceStack services, they benefit from being highly interoperable. This FileBlazor demo uses native Blazor components to upload to the generated API services providing a user friendly drag and drop interface.</p>
             <p>Navigate to the public <a href="/aws/public">S3</a>, <a href="/azure/public">Azure</a> or <a href="/filesystem/public">File System</a> file galleries on the left to preview files without authenticating, or <a>login</a> to see the different file access types and upload files yourself.</p>
             <div class="my-8 flex justify-center">
                 <a href="https://github.com/NetCoreApps/FileBlazor" 
