@@ -19,6 +19,9 @@
     <ItemGroup>
       <ProjectReference Include="..\FileBlazor.ServiceModel\FileBlazor.ServiceModel.csproj" />
     </ItemGroup>
+    <ItemGroup>
+      <Reference Include="Microsoft.AspNetCore.Components.Authorization" />
+    </ItemGroup>
 </Project>
 
 
