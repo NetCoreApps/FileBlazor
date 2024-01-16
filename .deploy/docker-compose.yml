@@ -15,6 +15,10 @@ services:
             LETSENCRYPT_EMAIL: ${LETSENCRYPT_EMAIL}
             LC_ALL: "en_US.UTF-8"
             LANG: "en_US.UTF-8"
+            AWS_ACCESS_KEY_ID: ${AWS_ACCESS_KEY_ID}
+            AWS_REGION: ${AWS_REGION}
+            AWS_SECRET_ACCESS_KEY: ${AWS_SECRET_ACCESS_KEY}
+            AZURE_BLOB_CONNECTION_STRING: ${AZURE_BLOB_CONNECTION_STRING}
         volumes:
             - ./App_Data:/app/App_Data  
 
