@@ -103,6 +103,10 @@ jobs:
           echo "APP_NAME=${{ github.event.repository.name }}" >> .deploy/.env
           echo "IMAGE_REPO=${{ env.image_repository_name }}" >> .deploy/.env
           echo "RELEASE_VERSION=${{ env.TAG_NAME }}" >> .deploy/.env
+          echo "AWS_ACCESS_KEY_ID=${{ secrets.AWS_ACCESS_KEY_ID }}" >> .deploy/.env
+          echo "AWS_REGION=${{ secrets.AWS_REGION }}" >> .deploy/.env
+          echo "AWS_SECRET_ACCESS_KEY=${{ secrets.AWS_SECRET_ACCESS_KEY }}" >> .deploy/.env
+          echo "AZURE_BLOB_CONNECTION_STRING=${{ secrets.AZURE_BLOB_CONNECTION_STRING }}" >> .deploy/.env
       
       # Copy only the docker-compose.yml to remote server home folder
       - name: copy files to target server via scp
