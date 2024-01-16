@@ -1,202 +1,183 @@
-﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+<Project Sdk="Microsoft.NET.Sdk.Web">
 
     <PropertyGroup>
-        <TargetFramework>net6.0</TargetFramework>
+        <TargetFramework>net8.0</TargetFramework>
         <Nullable>enable</Nullable>
         <ImplicitUsings>enable</ImplicitUsings>
+        <UserSecretsId>aspnet-FileBlazor-35e3ff40-c9b5-4fd2-8488-c0240995f412</UserSecretsId>
+        <TypeScriptCompileBlocked>true</TypeScriptCompileBlocked>
+        <PublishProfile>DefaultContainer</PublishProfile>
     </PropertyGroup>
 
-    <ItemGroup>
-      <None Remove="samplefiles\animated.gif" />
-      <None Remove="samplefiles\image.svg" />
-      <None Remove="samplefiles\progressive.jpg" />
-      <None Remove="samplefiles\sample.aac" />
-      <None Remove="samplefiles\sample.ac3" />
-      <None Remove="samplefiles\sample.ai" />
-      <None Remove="samplefiles\sample.aiff" />
-      <None Remove="samplefiles\sample.amr" />
-      <None Remove="samplefiles\sample.au" />
-      <None Remove="samplefiles\sample.avi" />
-      <None Remove="samplefiles\sample.dat" />
-      <None Remove="samplefiles\sample.flac" />
-      <None Remove="samplefiles\sample.flv" />
-      <None Remove="samplefiles\sample.gif" />
-      <None Remove="samplefiles\sample.jpg" />
-      <None Remove="samplefiles\sample.mid" />
-      <None Remove="samplefiles\sample.mka" />
-      <None Remove="samplefiles\sample.mov" />
-      <None Remove="samplefiles\sample.mp3" />
-      <None Remove="samplefiles\sample.mp4" />
-      <None Remove="samplefiles\sample.ogg" />
-      <None Remove="samplefiles\sample.png" />
-      <None Remove="samplefiles\sample.ra" />
-      <None Remove="samplefiles\sample.tiff" />
-      <None Remove="samplefiles\sample.txt" />
-      <None Remove="samplefiles\sample.voc" />
-      <None Remove="samplefiles\sample.wav" />
-      <None Remove="samplefiles\sample.webm" />
-      <None Remove="samplefiles\sample.webp" />
-      <None Remove="samplefiles\sample.wma" />
-      <None Remove="samplefiles\sample.xml" />
-      <None Remove="samplefiles\sample.xsd" />
-    </ItemGroup>
-
-    <ItemGroup>
-      <Content Include="samplefiles\animated.gif">
-        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      </Content>
-      <Content Include="samplefiles\image.svg">
-        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      </Content>
-      <Content Include="samplefiles\progressive.jpg">
-        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      </Content>
-      <Content Include="samplefiles\sample.aac">
-        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      </Content>
-      <Content Include="samplefiles\sample.ac3">
-        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      </Content>
-      <Content Include="samplefiles\sample.ai">
-        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      </Content>
-      <Content Include="samplefiles\sample.aiff">
-        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      </Content>
-      <Content Include="samplefiles\sample.amr">
-        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      </Content>
-      <Content Include="samplefiles\sample.au">
-        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      </Content>
-      <Content Include="samplefiles\sample.avi">
-        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      </Content>
-      <Content Include="samplefiles\sample.dat">
-        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      </Content>
-      <Content Include="samplefiles\sample.flac">
-        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      </Content>
-      <Content Include="samplefiles\sample.flv">
-        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      </Content>
-      <Content Include="samplefiles\sample.gif">
-        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      </Content>
-      <Content Include="samplefiles\sample.jpg">
-        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      </Content>
-      <Content Include="samplefiles\sample.mid">
-        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      </Content>
-      <Content Include="samplefiles\sample.mka">
-        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      </Content>
-      <Content Include="samplefiles\sample.mov">
-        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      </Content>
-      <Content Include="samplefiles\sample.mp3">
-        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      </Content>
-      <Content Include="samplefiles\sample.mp4">
-        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      </Content>
-      <Content Include="samplefiles\sample.ogg">
-        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      </Content>
-      <Content Include="samplefiles\sample.png">
-        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      </Content>
-      <Content Include="samplefiles\sample.ra">
-        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      </Content>
-      <Content Include="samplefiles\sample.tiff">
-        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      </Content>
-      <Content Include="samplefiles\sample.txt">
-        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      </Content>
-      <Content Include="samplefiles\sample.voc">
-        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      </Content>
-      <Content Include="samplefiles\sample.wav">
-        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      </Content>
-      <Content Include="samplefiles\sample.webm">
-        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      </Content>
-      <Content Include="samplefiles\sample.webp">
-        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      </Content>
-      <Content Include="samplefiles\sample.wma">
-        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      </Content>
-      <Content Include="samplefiles\sample.xml">
-        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      </Content>
-      <Content Include="samplefiles\sample.xsd">
-        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      </Content>
-    </ItemGroup>
     <ItemGroup>
         <Using Include="FileBlazor" />
         <Using Include="ServiceStack" />
     </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="Bogus" Version="34.0.2" />
-        <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Server" Version="6.0.0" />
-        <PackageReference Include="ServiceStack" Version="6.*" />
-        <PackageReference Include="ServiceStack.OrmLite.Sqlite.Data" Version="6.*" />
-        <PackageReference Include="ServiceStack.Server" Version="6.*" />
+        <None Remove="Migrations\samplefiles\animated.gif" />
+        <None Remove="Migrations\samplefiles\image.svg" />
+        <None Remove="Migrations\samplefiles\progressive.jpg" />
+        <None Remove="Migrations\samplefiles\sample.aac" />
+        <None Remove="Migrations\samplefiles\sample.ac3" />
+        <None Remove="Migrations\samplefiles\sample.ai" />
+        <None Remove="Migrations\samplefiles\sample.aiff" />
+        <None Remove="Migrations\samplefiles\sample.amr" />
+        <None Remove="Migrations\samplefiles\sample.au" />
+        <None Remove="Migrations\samplefiles\sample.avi" />
+        <None Remove="Migrations\samplefiles\sample.dat" />
+        <None Remove="Migrations\samplefiles\sample.flac" />
+        <None Remove="Migrations\samplefiles\sample.flv" />
+        <None Remove="Migrations\samplefiles\sample.gif" />
+        <None Remove="Migrations\samplefiles\sample.jpg" />
+        <None Remove="Migrations\samplefiles\sample.mid" />
+        <None Remove="Migrations\samplefiles\sample.mka" />
+        <None Remove="Migrations\samplefiles\sample.mov" />
+        <None Remove="Migrations\samplefiles\sample.mp3" />
+        <None Remove="Migrations\samplefiles\sample.mp4" />
+        <None Remove="Migrations\samplefiles\sample.ogg" />
+        <None Remove="Migrations\samplefiles\sample.png" />
+        <None Remove="Migrations\samplefiles\sample.ra" />
+        <None Remove="Migrations\samplefiles\sample.tiff" />
+        <None Remove="Migrations\samplefiles\sample.txt" />
+        <None Remove="Migrations\samplefiles\sample.voc" />
+        <None Remove="Migrations\samplefiles\sample.wav" />
+        <None Remove="Migrations\samplefiles\sample.webm" />
+        <None Remove="Migrations\samplefiles\sample.webp" />
+        <None Remove="Migrations\samplefiles\sample.wma" />
+        <None Remove="Migrations\samplefiles\sample.xml" />
+        <None Remove="Migrations\samplefiles\sample.xsd" />
     </ItemGroup>
 
+    <ItemGroup>
+        <Content Include="Migrations\samplefiles\animated.gif">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Migrations\samplefiles\image.svg">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Migrations\samplefiles\progressive.jpg">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Migrations\samplefiles\sample.aac">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Migrations\samplefiles\sample.ac3">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Migrations\samplefiles\sample.ai">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Migrations\samplefiles\sample.aiff">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Migrations\samplefiles\sample.amr">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Migrations\samplefiles\sample.au">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Migrations\samplefiles\sample.avi">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Migrations\samplefiles\sample.dat">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Migrations\samplefiles\sample.flac">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Migrations\samplefiles\sample.flv">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Migrations\samplefiles\sample.gif">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Migrations\samplefiles\sample.jpg">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Migrations\samplefiles\sample.mid">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Migrations\samplefiles\sample.mka">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Migrations\samplefiles\sample.mov">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Migrations\samplefiles\sample.mp3">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Migrations\samplefiles\sample.mp4">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Migrations\samplefiles\sample.ogg">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Migrations\samplefiles\sample.png">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Migrations\samplefiles\sample.ra">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Migrations\samplefiles\sample.tiff">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Migrations\samplefiles\sample.txt">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Migrations\samplefiles\sample.voc">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Migrations\samplefiles\sample.wav">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Migrations\samplefiles\sample.webm">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Migrations\samplefiles\sample.webp">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Migrations\samplefiles\sample.wma">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Migrations\samplefiles\sample.xml">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Migrations\samplefiles\sample.xsd">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+    </ItemGroup>
+
+    <ItemGroup>
+        <Content Include="_pages\**" CopyToPublishDirectory="PreserveNewest" />
+        <Content Include="_videos\**" CopyToPublishDirectory="PreserveNewest" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Bogus" Version="35.4.0" />
+        <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Server" Version="8.*" />
+        <PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="8.*" />
+        <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="8.*" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="8.*" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="8.*" />
+        <PackageReference Include="Markdig" Version="0.34.*" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <PackageReference Include="ServiceStack" Version="8.*" />
+        <PackageReference Include="ServiceStack.Aws" Version="8.0.0" />
+        <PackageReference Include="ServiceStack.Azure" Version="8.0.1" />
+        <PackageReference Include="ServiceStack.Blazor" Version="8.*" />
+        <PackageReference Include="ServiceStack.Mvc" Version="8.*" />
+        <PackageReference Include="ServiceStack.OrmLite.Sqlite.Data" Version="8.*" />
+        <PackageReference Include="ServiceStack.Extensions" Version="8.*" />
+        <PackageReference Include="ServiceStack.Server" Version="8.*" />
+    </ItemGroup>
+    
     <ItemGroup>
         <ProjectReference Include="..\FileBlazor.Client\FileBlazor.Client.csproj" />
         <ProjectReference Include="..\FileBlazor.ServiceInterface\FileBlazor.ServiceInterface.csproj" />
         <ProjectReference Include="..\FileBlazor.ServiceModel\FileBlazor.ServiceModel.csproj" />
     </ItemGroup>
-
-    <ItemGroup>
-      <Content Update="samplefiles\sample.json">
-        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      </Content>
-    </ItemGroup>
-    
-    <PropertyGroup>
-        <ClientDir>$(MSBuildProjectDirectory)/../FileBlazor.Client</ClientDir>
-        <WwwRoot>$(ClientDir)/wwwroot</WwwRoot>
-        <TestsDir>$(MSBuildProjectDirectory)/../FileBlazor.Tests</TestsDir>
-    </PropertyGroup>
-
-    <!-- Populated in release.yml with GitHub Actions secrets -->
-    <Target Name="DeployApi" AfterTargets="Build" Condition="$(DEPLOY_API) != ''">
-        <Exec Command="echo DEPLOY_API=$(DEPLOY_API)" />
-
-        <!-- Update Production settings with DEPLOY_API Blazor UI should use  -->
-        <WriteLinesToFile File="$(WwwRoot)/appsettings.Production.json" Lines="$([System.IO.File]::ReadAllText($(WwwRoot)/appsettings.Production.json).Replace('{DEPLOY_API}',$(DEPLOY_API)))" Overwrite="true" Encoding="UTF-8" />
-
-        <!-- 404.html SPA fallback (supported by GitHub Pages, Cloudflare & Netlify CDNs) -->
-        <Copy SourceFiles="$(WwwRoot)/index.html" DestinationFiles="$(WwwRoot)/404.html" />
-
-        <!-- define /api proxy routes (supported by Cloudflare or Netlify CDNs)  -->
-        <WriteLinesToFile File="$(WwwRoot)/_redirects" Lines="$([System.IO.File]::ReadAllText($(WwwRoot)/_redirects).Replace('{DEPLOY_API}',$(DEPLOY_API)))" Overwrite="true" Encoding="UTF-8" />
-    </Target>
-    <Target Name="DeployCdn" AfterTargets="Build" Condition="$(DEPLOY_CDN) != ''">
-        <Exec Command="echo DEPLOY_CDN=$(DEPLOY_CDN)" />
-
-        <!-- Define custom domain name that CDN should use -->
-        <Exec Condition="$(DEPLOY_CDN) != ''" Command="echo $(DEPLOY_CDN) &gt; $(WwwRoot)/CNAME" />
-    </Target>
-
-    <!-- Prerender tasks run in release.yml -->
-    <Target Name="AppTasks" AfterTargets="Build" Condition="$(APP_TASKS) != ''">
-        <CallTarget Targets="Prerender" Condition="$(APP_TASKS.Contains('prerender'))" />
-    </Target>
-    <Target Name="Prerender">
-        <Message Text="Prerender..." />
-        <Exec Command="dotnet test --filter TestCategory=prerender --logger:&quot;console;verbosity=detailed&quot;" WorkingDirectory="$(TestsDir)" />
-    </Target>
 
 </Project>

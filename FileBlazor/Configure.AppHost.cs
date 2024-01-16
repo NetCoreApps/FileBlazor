@@ -1,9 +1,7 @@
-using System.Diagnostics;
 using Amazon;
-using Amazon.Runtime;
 using Amazon.S3;
+using FileBlazor.Data;
 using Funq;
-using ServiceStack;
 using FileBlazor.ServiceInterface;
 using FileBlazor.ServiceModel.Types;
 using ServiceStack.Auth;
@@ -18,13 +16,19 @@ namespace FileBlazor;
 
 public class AppHost : AppHostBase, IHostingStartup
 {
-    public AppHost() : base("FileBlazor", typeof(MyServices).Assembly)
-    {
-    }
+    public void Configure(IWebHostBuilder builder) => builder
+        .ConfigureServices((context, services) =>
+        {
+            // Configure ASP.NET Core IOC Dependencies
+        });
 
+    public AppHost() : base("FileBlazor", typeof(MyServices).Assembly) { }
+
+    // Configure your AppHost with the necessary configuration and dependencies your App needs
     public override void Configure(Container container)
     {
-        SetConfig(new HostConfig { 
+        SetConfig(new HostConfig {
+            IgnorePathInfoPrefixes = { "/appsettings", "/_framework" },
         });
 
         Plugins.Add(new CorsFeature(allowedHeaders: "Content-Type,Authorization",
@@ -95,12 +99,16 @@ public class AppHost : AppHostBase, IHostingStartup
                 throw new HttpError("Invalid request.");
         }
     }
+    
+    
 
     private static void ValidateDownload(IRequest request, IVirtualFile file)
     {
-        var session = request.GetSession();
+        var session = request.SessionAs<CustomUserSession>();
+        var principal = request.GetClaimsPrincipal();
+        
         // Admin role has access to all files.
-        if (session.HasRole(RoleNames.Admin, request.Resolve<IAuthRepository>()))
+        if (principal.IsInRole(RoleNames.Admin))
             return;
 
         var userFileAccess = GetFileAccessAndUserIdFromPath(file.VirtualPath);
@@ -140,8 +148,4 @@ public class AppHost : AppHostBase, IHostingStartup
         var accessType = access.ToEnum<FileAccessType>();
         return new UserFileAccess(accessType == FileAccessType.Private ? firstSeg : null, accessType);
     }
-
-    public void Configure(IWebHostBuilder builder) => builder
-        .ConfigureServices((context, services) =>
-            services.ConfigureNonBreakingSameSiteCookies(context.HostingEnvironment));
 }

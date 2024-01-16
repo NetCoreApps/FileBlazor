@@ -1,31 +1,23 @@
-using System;
-using System.Net.Http;
-using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
 using Microsoft.AspNetCore.Components.Authorization;
-using Microsoft.AspNetCore.Components.Web;
-using Blazor.Extensions.Logging;
-using ServiceStack.Blazor;
+using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using FileBlazor.Client;
+using FileBlazor.Client.UI;
+using ServiceStack.Blazor;
 
 var builder = WebAssemblyHostBuilder.CreateDefault(args);
-builder.Services.AddLogging(c => c
-    .AddBrowserConsole()
-    .SetMinimumLevel(LogLevel.Trace)
-);
-builder.RootComponents.Add<App>("#app");
-builder.RootComponents.Add<HeadOutlet>("head::after");
-builder.Services.AddOptions();
+
 builder.Services.AddAuthorizationCore();
+builder.Services.AddCascadingAuthenticationState();
+builder.Services.AddSingleton<AuthenticationStateProvider, PersistentAuthenticationStateProvider>();
+builder.Services.AddScoped<ILayoutService, LayoutService>();
 
 // Use / for local or CDN resources
 builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) });
-builder.Services.AddScoped<AuthenticationStateProvider>(s => s.GetRequiredService<ServiceStackStateProvider>());
-builder.Services.AddScoped<ILayoutService, LayoutService>();
 
-builder.Services.AddBlazorApiClient(builder.Configuration["ApiBaseUrl"] ?? builder.HostEnvironment.BaseAddress);
-
-builder.Services.AddScoped<ServiceStackStateProvider>();
+var apiBaseUrl = builder.Configuration["ApiBaseUrl"] ?? builder.HostEnvironment.BaseAddress;
+builder.Services.AddBlazorApiClient(apiBaseUrl);
+builder.Services.AddLocalStorage();
+builder.Services.AddScoped<KeyboardNavigation>();
+builder.Services.AddScoped<UserState>();
 
 await builder.Build().RunAsync();

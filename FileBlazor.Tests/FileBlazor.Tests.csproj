@@ -1,35 +1,28 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <TargetFramework>net6.0</TargetFramework>
+        <TargetFramework>net8.0</TargetFramework>
         <Nullable>enable</Nullable>
+        <ImplicitUsings>enable</ImplicitUsings>
         <DebugType>portable</DebugType>
         <OutputType>Library</OutputType>
     </PropertyGroup>
 
     <ItemGroup>
-      <None Remove="appsettings.json" />
-    </ItemGroup>
-
-    <ItemGroup>
-      <Content Include="appsettings.json">
-        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      </Content>
-    </ItemGroup>
-
-    <ItemGroup>
-        <ProjectReference Include="..\FileBlazor.Client\FileBlazor.Client.csproj" />
-        <ProjectReference Include="..\FileBlazor.ServiceInterface\FileBlazor.ServiceInterface.csproj" />
-        <ProjectReference Include="..\FileBlazor.ServiceModel\FileBlazor.ServiceModel.csproj" />
-
-        <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.*" />
         <PackageReference Include="NUnit" Version="3.*" />
         <PackageReference Include="NUnit3TestAdapter" Version="4.*" />
-        <PackageReference Include="coverlet.collector" Version="3.*" />
-        <PackageReference Include="bunit" Version="1.4.*" />
+        <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.*" />
+    </ItemGroup>
 
-        <PackageReference Include="ServiceStack" Version="6.*" />
-        <PackageReference Include="ServiceStack.Kestrel" Version="6.*" />
+    <ItemGroup>
+        <PackageReference Include="ServiceStack" Version="8.*" />
+        <PackageReference Include="ServiceStack.Kestrel" Version="8.*" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\FileBlazor.ServiceInterface\FileBlazor.ServiceInterface.csproj" />
+        <ProjectReference Include="..\FileBlazor.ServiceModel\FileBlazor.ServiceModel.csproj" />
+        <ProjectReference Include="..\FileBlazor\FileBlazor.csproj" />
     </ItemGroup>
 
 </Project>

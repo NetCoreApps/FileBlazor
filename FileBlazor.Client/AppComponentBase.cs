@@ -1,11 +1,7 @@
-using System;
-using System.Security.Claims;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Components;
-using Microsoft.AspNetCore.Components.Authorization;
 using ServiceStack;
+using ServiceStack.Blazor;
 
-namespace FileBlazor.Client;
+namespace FileBlazor;
 
 /// <summary>
 /// For Pages and Components that make use of ServiceStack functionality, e.g. Client
@@ -17,21 +13,6 @@ public abstract class AppComponentBase : ServiceStack.Blazor.BlazorComponentBase
 /// <summary>
 /// For Pages and Components requiring Authentication
 /// </summary>
-public abstract class AppAuthComponentBase : AppComponentBase
+public abstract class AppAuthComponentBase : AuthBlazorComponentBase
 {
-    [CascadingParameter]
-    protected Task<AuthenticationState>? AuthenticationStateTask { get; set; }
-
-    protected bool HasInit { get; set; }
-
-    protected bool IsAuthenticated => User?.Identity?.IsAuthenticated ?? false;
-
-    protected ClaimsPrincipal? User { get; set; }
-
-    protected override async Task OnParametersSetAsync()
-    {
-        var state = await AuthenticationStateTask!;
-        User = state.User;
-        HasInit = true;
-    }
 }

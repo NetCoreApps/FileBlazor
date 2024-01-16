@@ -1,27 +1,44 @@
-﻿<Project Sdk="Microsoft.NET.Sdk.BlazorWebAssembly">
+<Project Sdk="Microsoft.NET.Sdk.BlazorWebAssembly">
+
     <PropertyGroup>
-        <TargetFramework>net6.0</TargetFramework>
-        <TypeScriptCompileBlocked>true</TypeScriptCompileBlocked>
+        <TargetFramework>net8.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
-        <!-- Uncomment to view generated *.g.cs -->
-        <!--<UseRazorSourceGenerator>false</UseRazorSourceGenerator>-->
+        <NoDefaultLaunchSettingsFile>true</NoDefaultLaunchSettingsFile>
+        <StaticWebAssetProjectMode>Default</StaticWebAssetProjectMode>
     </PropertyGroup>
+
     <ItemGroup>
-        <PackageReference Include="Markdig" Version="0.26.0" />
-        <PackageReference Include="ServiceStack.Blazor" Version="6.*" />
-        <PackageReference Include="Blazor.Extensions.Logging" Version="2.0.4" />
-        <PackageReference Include="Microsoft.Extensions.Http" Version="6.0.0" />
-        <PackageReference Include="Microsoft.AspNetCore.Components.Authorization" Version="6.0.0" />
-        <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="6.0.0" />
-        <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="6.0.0" PrivateAssets="all" />
-        <PackageReference Include="System.Net.Http.Json" Version="6.0.0" />
+        <PackageReference Include="Markdig" Version="0.34.0" />
+        <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="8.*" />
+        <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Authentication" Version="8.*" />
     </ItemGroup>
+
+    <ItemGroup>
+        <PackageReference Include="ServiceStack.Blazor" Version="8.*" />
+    </ItemGroup>
+
     <ItemGroup>
       <ProjectReference Include="..\FileBlazor.ServiceModel\FileBlazor.ServiceModel.csproj" />
     </ItemGroup>
+
     <ItemGroup>
-      <Reference Include="Microsoft.AspNetCore.Components.Authorization" />
+      <_ContentIncludedByDefault Remove="Shared\Components\AlertSuccess.razor" />
+      <_ContentIncludedByDefault Remove="Shared\Components\CheckboxInput.razor" />
+      <_ContentIncludedByDefault Remove="Shared\Components\DateTimeInput.razor" />
+      <_ContentIncludedByDefault Remove="Shared\Components\DynamicInput.razor" />
+      <_ContentIncludedByDefault Remove="Shared\Components\ErrorSummary.razor" />
+      <_ContentIncludedByDefault Remove="Shared\Components\FileUpload.razor" />
+      <_ContentIncludedByDefault Remove="Shared\Components\GalleryItems.razor" />
+      <_ContentIncludedByDefault Remove="Shared\Components\SearchFiles.razor" />
+      <_ContentIncludedByDefault Remove="Shared\Components\SelectInput.razor" />
+      <_ContentIncludedByDefault Remove="Shared\Components\TextAreaInput.razor" />
+      <_ContentIncludedByDefault Remove="Shared\Components\TextInput.razor" />
+      <_ContentIncludedByDefault Remove="Pages\Admin\Index.razor" />
+      <_ContentIncludedByDefault Remove="Pages\Admin\Users\Create.razor" />
+      <_ContentIncludedByDefault Remove="Pages\Admin\Users\Edit.razor" />
+      <_ContentIncludedByDefault Remove="Pages\Admin\Users\Index.razor" />
+      <_ContentIncludedByDefault Remove="Pages\Secure\Bookings.razor" />
+      <_ContentIncludedByDefault Remove="Pages\Secure\Coupons.razor" />
     </ItemGroup>
 </Project>
-
-

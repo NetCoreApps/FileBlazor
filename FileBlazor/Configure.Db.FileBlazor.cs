@@ -11,15 +11,16 @@ namespace FileBlazor
     public static class ConfigureDbFileBlazor
     {
         private static Faker<S3FileItem> fileItemS3Faker = new Faker<S3FileItem>()
-                    .RuleFor(x => x.AppUserId, (faker) => faker.Random.Int(1, 5))
+                    .RuleFor(x => x.AppUserId, (faker) => faker.Random.Int(1, 4))
                     .RuleFor(x => x.FileAccessType, (faker) => faker.Random.Enum<FileAccessType>());
         
         private static Faker<AzureFileItem> fileItemAzureFaker = new Faker<AzureFileItem>()
-            .RuleFor(x => x.AppUserId, (faker) => faker.Random.Int(1, 5))
+            .RuleFor(x => x.AppUserId, (faker) => faker.Random.Int(1, 4))
             .RuleFor(x => x.FileAccessType, (faker) => faker.Random.Enum<FileAccessType>());
 
         private static Faker<FileSystemFileItem> fileItemFsFaker = new Faker<FileSystemFileItem>()
-            .RuleFor(x => x.AppUserId, (faker) => faker.Random.Int(1, 5))            .RuleFor(x => x.FileAccessType, (faker) => faker.Random.Enum<FileAccessType>());
+            .RuleFor(x => x.AppUserId, (faker) => faker.Random.Int(1, 4))            
+            .RuleFor(x => x.FileAccessType, (faker) => faker.Random.Enum<FileAccessType>());
 
 
 

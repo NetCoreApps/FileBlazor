@@ -1,16 +1,19 @@
 ﻿@page "/filesystem/{AccessType}"
 @using FileBlazor.ServiceModel.Types
-@inject ServiceStackStateProvider AuthStateProvider;
+@using FileBlazor.Client.Components.Shared
+@using FileBlazor.Client.UI
 @inject NavigationManager NavigationManager;
-@inherits AppComponentBase
+@inherits AuthBlazorComponentBase
 @inject JsonApiClient jsonApiClient;
+@rendermode InteractiveAuto
+
 <SetHeader>
     <h1 class="text-2xl font-semibold text-gray-900">File System View - @FileAccessType.ToString()</h1>
-    <SearchFiles OnSearch="performSearch"></SearchFiles>
 </SetHeader>
 
 <div class="mt-4">
 
+    <SearchFiles class="pb-4" OnSearch="performSearch"></SearchFiles>
     <BucketView Files="AppFiles"
                 BucketLandingPath="/filesystem"
                 FileAccessType="FileAccessType ?? ServiceModel.Types.FileAccessType.Public"
@@ -21,6 +24,8 @@
 
 @code {
 
+    [Inject] public UserState UserState { get; set; } = default!;
+    
     [Parameter]
     public string? AccessType { get; set; }
 
@@ -62,11 +67,10 @@
     {
         loading = true;
         AppFiles.Clear();
-        var authState = await AuthStateProvider.GetAuthenticationStateAsync();
-        var userId = authState.User.GetUserId();
+        var userId = User.GetUserId();
         ApiResult<QueryResponse<FileSystemFileItem>> apiFileItem;
 
-        if (authState.IsAuthenticated())
+        if (IsAuthenticated)
         {
             apiFileItem = await ApiAsync(new QueryFileSystemFileItems()
             {

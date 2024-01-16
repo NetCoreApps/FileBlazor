@@ -1,19 +1,28 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <TargetFramework>net6.0</TargetFramework>
-        <NoWarn>CA1822;CA2208</NoWarn>
+        <TargetFramework>net8.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="ServiceStack" Version="6.*" />
-        <PackageReference Include="ServiceStack.Aws" Version="6.0.3" />
-        <PackageReference Include="ServiceStack.Azure" Version="6.0.3" />
-        <PackageReference Include="ServiceStack.Server" Version="6.0.3" />
+        <PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="8.*" />
+        <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="8.*" />
+        <PackageReference Include="ServiceStack.Server" Version="8.0.1" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <PackageReference Include="ServiceStack" Version="8.*" />
+        <PackageReference Include="ServiceStack.Ormlite" Version="8.*" />
     </ItemGroup>
 
     <ItemGroup>
         <ProjectReference Include="..\FileBlazor.ServiceModel\FileBlazor.ServiceModel.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Compile Remove="TodosServices.cs" />
     </ItemGroup>
 
 </Project>
