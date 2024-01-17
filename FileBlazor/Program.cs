@@ -69,7 +69,6 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 // Register all services
-Console.WriteLine("services.AddServiceStack()");
 builder.Services.AddServiceStack(typeof(MyServices).Assembly, c => {
     c.AddSwagger(o => {
         //o.AddJwtBearer();
@@ -108,7 +107,10 @@ app.MapRazorComponents<App>()
 // Add additional endpoints required by the Identity /Account Razor components.
 app.MapAdditionalIdentityEndpoints();
 
-app.UseServiceStack(new AppHost());
+app.UseServiceStack(new AppHost(), options =>
+{
+    options.MapEndpoints();
+});
 
 BlazorConfig.Set(new()
 {
