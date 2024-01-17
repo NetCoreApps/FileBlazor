@@ -3,6 +3,7 @@
 namespace FileBlazor.ServiceModel;
 
 [ValidateIsAuthenticated]
+[Tag("User")]
 public class GetUserProfile : IGet, IReturn<GetUserProfileResponse> {}
 public class GetUserProfileResponse
 {
@@ -17,6 +18,8 @@ public class UserProfile
     public string? Handle { get; set; }
 }
 
+[ValidateIsAuthenticated]
+[Tag("User")]
 public class GetUserInfo : IGet, IReturn<GetUserInfoResponse>
 {
     public string RefId { get; set; }

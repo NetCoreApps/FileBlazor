@@ -1,4 +1,4 @@
-namespace FileBlazor;
+namespace FileBlazor.ServiceModel;
 
 public static class AppRoles
 {
