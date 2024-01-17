@@ -3,7 +3,7 @@
 namespace FileBlazor.ServiceModel;
 
 [ValidateIsAuthenticated]
-public class GetUserProfile : IReturn<GetUserProfileResponse> {}
+public class GetUserProfile : IGet, IReturn<GetUserProfileResponse> {}
 public class GetUserProfileResponse
 {
     public UserProfile Result { get; set; }
@@ -17,7 +17,7 @@ public class UserProfile
     public string? Handle { get; set; }
 }
 
-public class GetUserInfo : IReturn<GetUserInfoResponse>
+public class GetUserInfo : IGet, IReturn<GetUserInfoResponse>
 {
     public string RefId { get; set; }
 }

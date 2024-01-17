@@ -3,14 +3,14 @@ using ServiceStack;
 namespace FileBlazor.ServiceModel;
 
 [Route("/hello/{Name}")]
-public class Hello : IReturn<HelloResponse>
+public class Hello : IGet, IReturn<HelloResponse>
 {
     public string Name { get; set; }
 }
 
 [Route("/hellosecure/{Name}")]
 [ValidateIsAuthenticated]
-public class HelloSecure : IReturn<HelloResponse>
+public class HelloSecure : IGet, IReturn<HelloResponse>
 {
     public string Name { get; set; }
 }
