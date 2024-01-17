@@ -9,8 +9,10 @@ namespace FileBlazor;
 public class ConfigureAuth : IHostingStartup
 {
     public void Configure(IWebHostBuilder builder) => builder
-        .ConfigureAppHost(appHost => {
-            appHost.Plugins.Add(new AuthFeature(IdentityAuth.For<AppUser,int>(options => {
+        .ConfigureServices((context, services) =>
+        {
+            services.AddPlugin(new AuthFeature(IdentityAuth.For<AppUser, int>(options =>
+            {
                 options.EnableCredentialsAuth = true;
                 options.SessionFactory = () => new CustomUserSession();
             })));

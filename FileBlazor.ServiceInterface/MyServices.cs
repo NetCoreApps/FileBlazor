@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace FileBlazor.ServiceInterface;
 
-public class MyServices : Service
+public class MyServices(IAutoQueryDb AutoQuery) : Service
 {
     public static string AssertName(string Name) => Name.IsNullOrEmpty() 
         ? throw new ArgumentNullException(nameof(Name))
@@ -23,10 +23,7 @@ public class MyServices : Service
 
     public object Any(HelloSecure request) => 
         new HelloResponse { Result = $"Hello, {AssertName(request.Name)}!" };
-
-
-    public IAutoQueryDb AutoQuery { get; set; }
-
+    
     public object Get(QueryS3FileItems request)
     {
         return QueryFiles<QueryS3FileItems,S3FileItem,S3File>(request);

@@ -10,6 +10,7 @@ using ServiceStack.Blazor;
 using System.Net;
 using FileBlazor.Client;
 using FileBlazor.Client.UI;
+using FileBlazor.ServiceInterface;
 using FileBlazor.ServiceModel;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -63,6 +64,19 @@ services.AddLocalStorage();
 builder.Services.AddScoped<KeyboardNavigation>();
 builder.Services.AddScoped<UserState>();
 
+
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen();
+
+// Register all services
+Console.WriteLine("services.AddServiceStack()");
+builder.Services.AddServiceStack(typeof(MyServices).Assembly, c => {
+    c.AddSwagger(o => {
+        //o.AddJwtBearer();
+        o.AddBasicAuth();
+    });
+});
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -77,6 +91,9 @@ else
     // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
+
+app.UseSwagger();
+app.UseSwaggerUI();
 
 app.UseHttpsRedirection();
 
@@ -100,6 +117,7 @@ BlazorConfig.Set(new()
     IsDevelopment = app.Environment.IsDevelopment(),
     EnableLogging = app.Environment.IsDevelopment(),
     EnableVerboseLogging = app.Environment.IsDevelopment(),
+    RedirectSignIn = "/Account/Login"
 });
 
 app.Run();

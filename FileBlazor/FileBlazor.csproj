@@ -155,6 +155,7 @@
 
     <ItemGroup>
         <PackageReference Include="Bogus" Version="35.4.0" />
+        <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="8.*" />
         <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Server" Version="8.*" />
         <PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="8.*" />
         <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="8.*" />
@@ -165,10 +166,11 @@
 
     <ItemGroup>
         <PackageReference Include="ServiceStack" Version="8.*" />
-        <PackageReference Include="ServiceStack.Aws" Version="8.0.0" />
-        <PackageReference Include="ServiceStack.Azure" Version="8.0.1" />
+        <PackageReference Include="ServiceStack.Aws" Version="8.*" />
+        <PackageReference Include="ServiceStack.Azure" Version="8.*" />
         <PackageReference Include="ServiceStack.Blazor" Version="8.*" />
         <PackageReference Include="ServiceStack.Mvc" Version="8.*" />
+        <PackageReference Include="ServiceStack.AspNetCore.OpenApi" Version="8.*" />
         <PackageReference Include="ServiceStack.OrmLite.Sqlite.Data" Version="8.*" />
         <PackageReference Include="ServiceStack.Extensions" Version="8.*" />
         <PackageReference Include="ServiceStack.Server" Version="8.*" />
