@@ -38,15 +38,11 @@ public class AppHost : AppHostBase, IHostingStartup
             var appFs = new FileSystemVirtualFiles(context.HostingEnvironment.ContentRootPath.CombineWith("App_Data").AssertDir());
             var s3Client = new AmazonS3Client(awsAccessKeyId, awsSecretAccessKey, RegionEndpoint.USEast1);
             var s3DataVfs = new S3VirtualFiles(s3Client, "file-blazor-demo");
-            var azureBlobVfs = new AzureBlobVirtualFiles(azureBlobConnString ?? "missing", "fileblazordemo");
 
             if(string.IsNullOrEmpty(azureBlobConnString))
                 Log.Warn("Started without Azure Blob Storage configured.");
-            services.AddPlugin(new FilesUploadFeature(
-                new UploadLocation("azure", azureBlobVfs,
-                    readAccessRole: RoleNames.AllowAnon, resolvePath: ResolveUploadPath,
-                    validateUpload: ValidateUpload, validateDownload: ValidateDownload,
-                    maxFileBytes: 10 * 1024 * 1024),
+            
+            var uploadLocations = new[] {
                 new UploadLocation("s3", s3DataVfs,
                     readAccessRole: RoleNames.AllowAnon, resolvePath: ResolveUploadPath,
                     validateUpload: ValidateUpload, validateDownload: ValidateDownload,
@@ -59,7 +55,19 @@ public class AppHost : AppHostBase, IHostingStartup
                 new UploadLocation("users", appFs, allowExtensions: FileExt.WebImages,
                     resolvePath: ctx => $"/profiles/users/{ctx.UserAuthId}.{ctx.FileExtension}",
                     maxFileBytes: 10 * 1024 * 1024)
-            ));
+            };
+
+            if (!string.IsNullOrEmpty(azureBlobConnString))
+            {
+                var azureBlobVfs = new AzureBlobVirtualFiles(azureBlobConnString, "fileblazordemo");
+                uploadLocations = uploadLocations.Prepend(new UploadLocation("azure", azureBlobVfs,
+                    readAccessRole: RoleNames.AllowAnon, resolvePath: ResolveUploadPath,
+                    validateUpload: ValidateUpload, validateDownload: ValidateDownload,
+                    maxFileBytes: 10 * 1024 * 1024)).ToArray();
+            }
+            
+            var uploadPlugin = new FilesUploadFeature(uploadLocations);
+            services.AddPlugin(uploadPlugin);
 
         });
 
