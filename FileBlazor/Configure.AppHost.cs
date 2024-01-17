@@ -38,8 +38,10 @@ public class AppHost : AppHostBase, IHostingStartup
             var appFs = new FileSystemVirtualFiles(context.HostingEnvironment.ContentRootPath.CombineWith("App_Data").AssertDir());
             var s3Client = new AmazonS3Client(awsAccessKeyId, awsSecretAccessKey, RegionEndpoint.USEast1);
             var s3DataVfs = new S3VirtualFiles(s3Client, "file-blazor-demo");
-            var azureBlobVfs = new AzureBlobVirtualFiles(azureBlobConnString, "fileblazordemo");
+            var azureBlobVfs = new AzureBlobVirtualFiles(azureBlobConnString ?? "missing", "fileblazordemo");
 
+            if(string.IsNullOrEmpty(azureBlobConnString))
+                Log.Warn("Started without Azure Blob Storage configured.");
             services.AddPlugin(new FilesUploadFeature(
                 new UploadLocation("azure", azureBlobVfs,
                     readAccessRole: RoleNames.AllowAnon, resolvePath: ResolveUploadPath,
