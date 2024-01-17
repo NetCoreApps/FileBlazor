@@ -12,9 +12,10 @@ public class UnitTest
 
     public UnitTest()
     {
-        appHost = new BasicAppHost().Init();
+        appHost = new BasicAppHost();
         appHost.Container.AddTransient<MyServices>();
         appHost.Container.AddPlugin(new AutoQueryFeature());
+        appHost.Init();
     }
 
     [OneTimeTearDown]
