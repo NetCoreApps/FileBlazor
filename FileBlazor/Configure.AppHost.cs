@@ -1,20 +1,18 @@
+using ServiceStack.IO;
+using ServiceStack.Web;
+using ServiceStack.Azure.Storage;
+using ServiceStack.Configuration;
 using Amazon;
 using Amazon.S3;
 using FileBlazor.Data;
-using Funq;
 using FileBlazor.ServiceInterface;
 using FileBlazor.ServiceModel.Types;
-using ServiceStack.Auth;
-using ServiceStack.Azure.Storage;
-using ServiceStack.Configuration;
-using ServiceStack.IO;
-using ServiceStack.Web;
 
 [assembly: HostingStartup(typeof(FileBlazor.AppHost))]
 
 namespace FileBlazor;
 
-public class AppHost : AppHostBase, IHostingStartup
+public class AppHost() : AppHostBase("FileBlazor", typeof(MyServices).Assembly), IHostingStartup
 {
     public void Configure(IWebHostBuilder builder) => builder
         .ConfigureServices((context, services) =>
@@ -39,10 +37,11 @@ public class AppHost : AppHostBase, IHostingStartup
             var s3Client = new AmazonS3Client(awsAccessKeyId, awsSecretAccessKey, RegionEndpoint.USEast1);
             var s3DataVfs = new S3VirtualFiles(s3Client, "file-blazor-demo");
 
-            if(string.IsNullOrEmpty(azureBlobConnString))
+            if (string.IsNullOrEmpty(azureBlobConnString))
                 Log.Warn("Started without Azure Blob Storage configured.");
-            
-            var uploadLocations = new[] {
+
+            var uploadLocations = new[]
+            {
                 new UploadLocation("s3", s3DataVfs,
                     readAccessRole: RoleNames.AllowAnon, resolvePath: ResolveUploadPath,
                     validateUpload: ValidateUpload, validateDownload: ValidateDownload,
@@ -65,26 +64,25 @@ public class AppHost : AppHostBase, IHostingStartup
                     validateUpload: ValidateUpload, validateDownload: ValidateDownload,
                     maxFileBytes: 10 * 1024 * 1024)).ToArray();
             }
-            
+
             var uploadPlugin = new FilesUploadFeature(uploadLocations);
             services.AddPlugin(uploadPlugin);
-
         });
-
-    public AppHost() : base("FileBlazor", typeof(MyServices).Assembly) { }
 
     // Configure your AppHost with the necessary configuration and dependencies your App needs
     public override void Configure()
     {
-        SetConfig(new HostConfig {
+        SetConfig(new HostConfig
+        {
             IgnorePathInfoPrefixes = { "/appsettings", "/_framework" },
         });
 
-        ConfigurePlugin<UiFeature>(feature => feature.Info.BrandIcon = new ImageInfo {
+        ConfigurePlugin<UiFeature>(feature => feature.Info.BrandIcon = new ImageInfo
+        {
             Svg = "/img/blazor.svg",
         });
     }
-    
+
     private static string ResolveUploadPath(FilesUploadContext ctx)
     {
         if (ctx.Dto is IFileItemRequest { FileAccessType: { } } createFile)
@@ -93,6 +91,7 @@ public class AppHost : AppHostBase, IHostingStartup
                 ? ctx.GetLocationPath($"/{createFile.FileAccessType}/{ctx.FileName}")
                 : ctx.GetLocationPath($"/{createFile.FileAccessType}/{ctx.UserAuthId}/{ctx.FileName}");
         }
+
         throw HttpError.BadRequest("Invalid file creation request.");
     }
 
@@ -114,7 +113,7 @@ public class AppHost : AppHostBase, IHostingStartup
     {
         var session = request.SessionAs<CustomUserSession>();
         var principal = request.GetClaimsPrincipal();
-        
+
         // Admin role has access to all files.
         if (principal.IsInRole(RoleNames.Admin))
             return;

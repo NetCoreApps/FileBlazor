@@ -50,21 +50,20 @@ public class SmtpConfig
 /// </summary>
 public class EmailServices(SmtpConfig Config, ILogger<EmailServices> Log) : Service
 {
-    /* Uncomment to enable sending emails with SMTP
     public object Any(SendEmail request)
     {
-        Log.LogInformation("Sending email to {Email} with subject {Subject}", request.To, request.Subject);
+        log.LogInformation("Sending email to {Email} with subject {Subject}", request.To, request.Subject);
 
-        using var client = new SmtpClient(Config.Host, Config.Port);
-        client.Credentials = new System.Net.NetworkCredential(Config.Username, Config.Password);
+        using var client = new SmtpClient(config.Host, config.Port);
+        client.Credentials = new System.Net.NetworkCredential(config.Username, config.Password);
         client.EnableSsl = true;
 
         // If DevToEmail is set, send all emails to that address instead
-        var emailTo = Config.DevToEmail != null
-            ? new MailAddress(Config.DevToEmail)
+        var emailTo = config.DevToEmail != null
+            ? new MailAddress(config.DevToEmail)
             : new MailAddress(request.To, request.ToName);
 
-        var emailFrom = new MailAddress(Config.FromEmail, Config.FromName);
+        var emailFrom = new MailAddress(config.FromEmail, config.FromName);
 
         var msg = new MailMessage(emailFrom, emailTo)
         {
@@ -73,14 +72,13 @@ public class EmailServices(SmtpConfig Config, ILogger<EmailServices> Log) : Serv
             IsBodyHtml = request.BodyHtml != null,
         };
 
-        if (Config.Bcc != null)
+        if (config.Bcc != null)
         {
-            msg.Bcc.Add(new MailAddress(Config.Bcc));
+            msg.Bcc.Add(new MailAddress(config.Bcc));
         }
 
         client.Send(msg);
 
         return new EmptyResponse();
     }
-    */
 }

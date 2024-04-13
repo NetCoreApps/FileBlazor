@@ -11,20 +11,19 @@ namespace FileBlazor
     public static class ConfigureDbFileBlazor
     {
         private static Faker<S3FileItem> fileItemS3Faker = new Faker<S3FileItem>()
-                    .RuleFor(x => x.AppUserId, (faker) => faker.Random.Int(1, 4))
-                    .RuleFor(x => x.FileAccessType, (faker) => faker.Random.Enum<FileAccessType>());
-        
+            .RuleFor(x => x.AppUserId, faker => faker.Random.Int(1, 4))
+            .RuleFor(x => x.FileAccessType, faker => faker.Random.Enum<FileAccessType>());
+
         private static Faker<AzureFileItem> fileItemAzureFaker = new Faker<AzureFileItem>()
-            .RuleFor(x => x.AppUserId, (faker) => faker.Random.Int(1, 4))
-            .RuleFor(x => x.FileAccessType, (faker) => faker.Random.Enum<FileAccessType>());
+            .RuleFor(x => x.AppUserId, faker => faker.Random.Int(1, 4))
+            .RuleFor(x => x.FileAccessType, faker => faker.Random.Enum<FileAccessType>());
 
         private static Faker<FileSystemFileItem> fileItemFsFaker = new Faker<FileSystemFileItem>()
-            .RuleFor(x => x.AppUserId, (faker) => faker.Random.Int(1, 4))            
-            .RuleFor(x => x.FileAccessType, (faker) => faker.Random.Enum<FileAccessType>());
+            .RuleFor(x => x.AppUserId, faker => faker.Random.Int(1, 4))
+            .RuleFor(x => x.FileAccessType, faker => faker.Random.Enum<FileAccessType>());
 
-
-
-        public static async Task SeedFileBlazor(this IDbConnection db, S3VirtualFiles s3Vfs, AzureBlobVirtualFiles azureVfs, FileSystemVirtualFiles fsVfs, string sampleFilesDir)
+        public static async Task SeedFileBlazor(this IDbConnection db, S3VirtualFiles? s3Vfs,
+            AzureBlobVirtualFiles? azureVfs, FileSystemVirtualFiles? fsVfs, string sampleFilesDir)
         {
             var seedData = db.CreateTableIfNotExists<FileSystemFile>();
             db.CreateTableIfNotExists<S3File>();
@@ -33,18 +32,27 @@ namespace FileBlazor
             db.CreateTableIfNotExists<S3FileItem>();
             db.CreateTableIfNotExists<AzureFileItem>();
 
-            if(seedData)
+            if (seedData)
             {
                 var seed = 1807832753;
                 Randomizer.Seed = new Random(seed);
-                await SeedSampleFilesForVfs<S3File,S3FileItem>(sampleFilesDir, s3Vfs, db, fileItemS3Faker);
-                await SeedSampleFilesForVfs<AzureFile, AzureFileItem>(sampleFilesDir, azureVfs, db, fileItemAzureFaker);
-                await SeedSampleFilesForVfs<FileSystemFile, FileSystemFileItem>(sampleFilesDir, fsVfs, db, fileItemFsFaker);                
+                if (s3Vfs != null)
+                {
+                    await SeedSampleFilesForVfs<S3File, S3FileItem>(sampleFilesDir, s3Vfs, db, fileItemS3Faker);
+                }
+                if (azureVfs != null)
+                {
+                    await SeedSampleFilesForVfs<AzureFile, AzureFileItem>(sampleFilesDir, azureVfs, db, fileItemAzureFaker);
+                }
+                if (fsVfs != null)
+                {
+                    await SeedSampleFilesForVfs<FileSystemFile, FileSystemFileItem>(sampleFilesDir, fsVfs, db, fileItemFsFaker);
+                }
             }
-
         }
 
-        private static async Task SeedSampleFilesForVfs<T,TItem>(string sampleFilesDir, IVirtualFiles vfs, IDbConnection db, Faker<TItem> faker)
+        private static async Task SeedSampleFilesForVfs<T, TItem>(string sampleFilesDir, IVirtualFiles vfs,
+            IDbConnection db, Faker<TItem> faker)
             where T : class, IFile, new()
             where TItem : class, IFileItem
         {
@@ -54,12 +62,13 @@ namespace FileBlazor
             foreach (var sampleFile in sampleFiles)
             {
                 var sampleFileInfo = new FileInfo(sampleFile);
-                var fileName = fileFaker.Commerce.ProductName().ToLower().Replace(" ","_") + sampleFile.GetExtension();
+                var fileName = fileFaker.Commerce.ProductName().ToLower().Replace(" ", "_") + sampleFile.GetExtension();
                 var fileItem = faker.Generate();
                 if (fileItem.FileAccessType == FileAccessType.Team)
                 {
                     fileItem.RoleName = fileFaker.PickRandom(allRoles);
                 }
+
                 var uploadPathName = vfsUploadPathMapper[typeof(T)];
                 var filePath = CreateFilePath(uploadPathName, fileItem.FileAccessType, fileName);
                 var relativePath = filePath.Replace("/uploads/", "/");
@@ -79,11 +88,11 @@ namespace FileBlazor
             }
         }
 
-        private static Dictionary<Type, string> vfsUploadPathMapper = new Dictionary<Type, string>
+        private static Dictionary<Type, string> vfsUploadPathMapper = new()
         {
-            {typeof(S3File),"s3" },
-            {typeof(AzureFile),"azure" },
-            {typeof(FileSystemFile),"fs" }
+            { typeof(S3File), "s3" },
+            { typeof(AzureFile), "azure" },
+            { typeof(FileSystemFile), "fs" }
         };
 
         private static string CreateFilePath(string uploadLocation, FileAccessType? fileAccessType, string fileName)
@@ -92,9 +101,9 @@ namespace FileBlazor
             return path;
         }
 
-        private static void UploadFile(IVirtualFiles vfs, IDbConnection db, FileInfo fileInfo, IFileItem fileItem, IFile file)
+        private static void UploadFile(IVirtualFiles vfs, IDbConnection db, FileInfo fileInfo, IFileItem fileItem,
+            IFile file)
         {
-
         }
     }
 }

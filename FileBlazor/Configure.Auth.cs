@@ -13,8 +13,8 @@ public class ConfigureAuth : IHostingStartup
         {
             services.AddPlugin(new AuthFeature(IdentityAuth.For<AppUser, int>(options =>
             {
-                options.EnableCredentialsAuth = true;
                 options.SessionFactory = () => new CustomUserSession();
+                options.CredentialsAuth();
             })));
         });
 }
