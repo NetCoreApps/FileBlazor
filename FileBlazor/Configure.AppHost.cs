@@ -30,15 +30,15 @@ public class AppHost() : AppHostBase("FileBlazor", typeof(MyServices).Assembly),
                                  Environment.GetEnvironmentVariable("LOCAL_AWS_ACCESS_KEY_ID");
             var awsSecretAccessKey = Environment.GetEnvironmentVariable("AWS_SECRET_ACCESS_KEY") ??
                                      Environment.GetEnvironmentVariable("LOCAL_AWS_SECRET_ACCESS_KEY");
-            var azureBlobConnString = Environment.GetEnvironmentVariable("AZURE_BLOB_CONNECTION_STRING") ??
-                                      Environment.GetEnvironmentVariable("LOCAL_AZURE_BLOB_CONNECTION_STRING");
+            // var azureBlobConnString = Environment.GetEnvironmentVariable("AZURE_BLOB_CONNECTION_STRING") ??
+            //                           Environment.GetEnvironmentVariable("LOCAL_AZURE_BLOB_CONNECTION_STRING");
 
             var appFs = new FileSystemVirtualFiles(context.HostingEnvironment.ContentRootPath.CombineWith("App_Data").AssertDir());
             var s3Client = new AmazonS3Client(awsAccessKeyId, awsSecretAccessKey, RegionEndpoint.USEast1);
             var s3DataVfs = new S3VirtualFiles(s3Client, "file-blazor-demo");
 
-            if (string.IsNullOrEmpty(azureBlobConnString))
-                Log.Warn("Started without Azure Blob Storage configured.");
+            // if (string.IsNullOrEmpty(azureBlobConnString))
+            Log.Warn("Started without Azure Blob Storage configured.");
 
             var uploadLocations = new[]
             {
@@ -56,14 +56,14 @@ public class AppHost() : AppHostBase("FileBlazor", typeof(MyServices).Assembly),
                     maxFileBytes: 10 * 1024 * 1024)
             };
 
-            if (!string.IsNullOrEmpty(azureBlobConnString))
-            {
-                var azureBlobVfs = new AzureBlobVirtualFiles(azureBlobConnString, "fileblazordemo");
-                uploadLocations = uploadLocations.Prepend(new UploadLocation("azure", azureBlobVfs,
-                    readAccessRole: RoleNames.AllowAnon, resolvePath: ResolveUploadPath,
-                    validateUpload: ValidateUpload, validateDownload: ValidateDownload,
-                    maxFileBytes: 10 * 1024 * 1024)).ToArray();
-            }
+            // if (!string.IsNullOrEmpty(azureBlobConnString))
+            // {
+            //     var azureBlobVfs = new AzureBlobVirtualFiles(azureBlobConnString, "fileblazordemo");
+            //     uploadLocations = uploadLocations.Prepend(new UploadLocation("azure", azureBlobVfs,
+            //         readAccessRole: RoleNames.AllowAnon, resolvePath: ResolveUploadPath,
+            //         validateUpload: ValidateUpload, validateDownload: ValidateDownload,
+            //         maxFileBytes: 10 * 1024 * 1024)).ToArray();
+            // }
 
             var uploadPlugin = new FilesUploadFeature(uploadLocations);
             services.AddPlugin(uploadPlugin);
