@@ -10,6 +10,10 @@
     </PropertyGroup>
 
     <ItemGroup>
+        <ContainerLabel Include="service" Value="file-blazor" />
+    </ItemGroup>
+
+    <ItemGroup>
         <Using Include="FileBlazor" />
         <Using Include="ServiceStack" />
     </ItemGroup>
